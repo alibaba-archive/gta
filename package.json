@@ -1,0 +1,22 @@
+{
+  "name": "gta",
+  "version": "0.0.0",
+  "description": "group teambition analysis tool",
+  "main": "lib/index.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:teambition/gta"
+  },
+  "keywords": [
+    "google",
+    "baidu",
+    "analysis"
+  ],
+  "author": "teambition",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/teambition/gta/issues"
+  }
+}

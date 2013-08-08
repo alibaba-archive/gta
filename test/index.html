@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>homepage</title>
+        <style>
+            body {
+                font-size: 12px;
+                font-family: Monaco;
+            }
+        </style>
+        <script src="http://sailxjx.local.com/teambition/gta/lib/index.js"></script>
+    </head>
+    <body>
+        hello world
+        <script>
+            gta = new Gta({
+                Google: {
+                    account: 'UA-33186961-1'
+                },
+                Baidu: {
+                    account: 'ec912ecc405ccd050e4cdf452ef4e85a'
+                }
+            });
+            gta.pageview({
+                'page': '/my-overridden-page?id=1',
+                'title': 'my overridden page'
+            })
+            gta.event('button', 'click', 'nav buttons', 4)
+        </script>
+    </body>
+</html>

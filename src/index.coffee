@@ -7,8 +7,7 @@ class Gta
     @providers = {}
     for provider, option of options
       Provider = Gta["#{provider[0].toUpperCase()}#{provider[1..]}"]
-      if Provider?
-        @providers[provider] = new Provider(option)
+      @providers[provider] = new Provider(option) if Provider?
 
   pageview: ->
     for name, provider of @providers
@@ -94,7 +93,6 @@ class Gta
       else
         data = args.join('_')
       @_q.push(['_trackPageview', data])
-      return this
 
     event: ->
       args = for i, val of arguments

@@ -34,38 +34,34 @@ class Gta
       @option.account = option.account or ''
       @_q = @_initial()
 
-    _initial: ->
-
-    pageview: ->
-      args = for i, val of arguments
-        val
-      @_q.push(['_trackPageview', args.join('_')])
-      return this
-
-    event: ->
-      args = for i, val of arguments
-        val
-      @_q.push(['_trackEvent', args[0], args[1], args[2..].join('_')])
-
   class @Google extends @Base
 
     constructor: (option) ->
       super
-      @_q.push(['_setDomainName', @option.domain]) if @option.domain?
 
     _initial: ->
-      unless window._gaq?
+      unless window.ga?
         Gta.appendScript("""
-          var _gaq = _gaq || [];
-          _gaq.push(['_setAccount', '#{@option.account}']);
-          _gaq.push(['_trackPageview']);
-          (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-          })();
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+          ga('create', '#{@option.account}');
+          ga('send', 'pageview');
         """)
-      return window._gaq
+      return window.ga
+
+    pageview: ->
+      args = for i, val of arguments
+        val
+      data = if typeof args[0] == 'object' then args[0] else args.join('_')
+      @_q('send', 'pageview', data)
+
+    event: ->
+      args = for i, val of arguments
+        val
+      data = ['send', 'event'].concat(args)
+      @_q.apply(@_q, data)
 
   class @Baidu extends @Base
 
@@ -76,9 +72,34 @@ class Gta
       unless window._hmt?
         Gta.appendScript("""
           var _hmt = _hmt || [];
-          _hmt.push(['_setAccount', '#{@option.account}']);
+          (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?#{@option.account}";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+          })();
         """)
       return window._hmt
 
+    pageview: ->
+      args = for i, val of arguments
+        val
+      if typeof args[0] == 'object'
+        if args[0]['page']?
+          data = args[0]['page']
+        else
+          data = for i, v of args[0]
+            v
+          data = data.join('_')
+      else
+        data = args.join('_')
+      @_q.push(['_trackPageview', data])
+      return this
+
+    event: ->
+      args = for i, val of arguments
+        val
+      data = ['_trackEvent'].concat(args)
+      @_q.push(data)
 
 exports.Gta = Gta

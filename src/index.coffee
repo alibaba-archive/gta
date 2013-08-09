@@ -7,8 +7,7 @@ class Gta
     @providers = {}
     for provider, option of options
       Provider = Gta["#{provider[0].toUpperCase()}#{provider[1..]}"]
-      if Provider?
-        @providers[provider] = new Provider(option)
+      @providers[provider] = new Provider(option) if Provider?
 
   pageview: ->
     for name, provider of @providers
@@ -52,14 +51,12 @@ class Gta
       return window.ga
 
     pageview: ->
-      args = for i, val of arguments
-        val
+      args = (val for i, val of arguments)
       data = if typeof args[0] == 'object' then args[0] else args.join('_')
       @_q('send', 'pageview', data)
 
     event: ->
-      args = for i, val of arguments
-        val
+      args = (val for i, val of arguments)
       data = ['send', 'event'].concat(args)
       @_q.apply(@_q, data)
 
@@ -82,8 +79,7 @@ class Gta
       return window._hmt
 
     pageview: ->
-      args = for i, val of arguments
-        val
+      args = (val for i, val of arguments)
       if typeof args[0] == 'object'
         if args[0]['page']?
           data = args[0]['page']
@@ -94,11 +90,9 @@ class Gta
       else
         data = args.join('_')
       @_q.push(['_trackPageview', data])
-      return this
 
     event: ->
-      args = for i, val of arguments
-        val
+      args = (val for i, val of arguments)
       data = ['_trackEvent'].concat(args)
       @_q.push(data)
 

@@ -51,14 +51,12 @@ class Gta
       return window.ga
 
     pageview: ->
-      args = for i, val of arguments
-        val
+      args = (val for i, val of arguments)
       data = if typeof args[0] == 'object' then args[0] else args.join('_')
       @_q('send', 'pageview', data)
 
     event: ->
-      args = for i, val of arguments
-        val
+      args = (val for i, val of arguments)
       data = ['send', 'event'].concat(args)
       @_q.apply(@_q, data)
 
@@ -81,8 +79,7 @@ class Gta
       return window._hmt
 
     pageview: ->
-      args = for i, val of arguments
-        val
+      args = (val for i, val of arguments)
       if typeof args[0] == 'object'
         if args[0]['page']?
           data = args[0]['page']
@@ -95,8 +92,7 @@ class Gta
       @_q.push(['_trackPageview', data])
 
     event: ->
-      args = for i, val of arguments
-        val
+      args = (val for i, val of arguments)
       data = ['_trackEvent'].concat(args)
       @_q.push(data)
 

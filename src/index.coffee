@@ -8,6 +8,7 @@ class Gta
     for provider, option of options
       Provider = Gta["#{provider[0].toUpperCase()}#{provider[1..]}"]
       @providers[provider] = new Provider(option) if Provider?
+    Gta.delegateEvents() if window.jQuery 
 
   pageview: ->
     for name, provider of @providers
@@ -25,6 +26,11 @@ class Gta
     dom.appendChild(text)
     head = document.getElementsByTagName('head')[0]
     head.appendChild(dom)
+
+  @delegateEvents: ->
+    $(document).on('click.gta', '[data-gta="events"]', (e) =>
+      console.log e
+    )
 
   class @Base
 

@@ -8,10 +8,12 @@
                 font-family: Monaco;
             }
         </style>
-        <script src="http://sailxjx.local.com/teambition/gta/lib/index.js"></script>
+        <script type="text/javascript" src="../bower_components/jquery/jquery.js"></script>
+        <script src="../lib/index.js"></script>
     </head>
     <body>
         hello world
+        <button data-gta='event' data-label='clicked a button'>click</button>
         <script>
             gta = new Gta({
                 Google: {
@@ -24,8 +26,9 @@
             gta.pageview({
                 'page': '/my-overridden-page?id=1',
                 'title': 'my overridden page'
-            })
-            gta.event('button', 'click', 'nav buttons', 4)
+            });
+            gta.event('button', 'click', 'nav buttons', 4);
+            $('body').append('<button data-gta="event" data-label="clicked an appended button">click again</button>');
         </script>
     </body>
 </html>

@@ -9,5 +9,7 @@
     "test",
     "tests"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "jquery": "~2.0.3"
+  }
 }

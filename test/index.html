@@ -13,7 +13,7 @@
     </head>
     <body>
         hello world
-        <button data-gta='event' data-label='click button'></button>
+        <button data-gta='event' data-label='clicked a button'>click</button>
         <script>
             gta = new Gta({
                 Google: {
@@ -26,8 +26,9 @@
             gta.pageview({
                 'page': '/my-overridden-page?id=1',
                 'title': 'my overridden page'
-            })
-            gta.event('button', 'click', 'nav buttons', 4)
+            });
+            gta.event('button', 'click', 'nav buttons', 4);
+            $('body').append('<button data-gta="event" data-label="clicked an appended button">click again</button>');
         </script>
     </body>
 </html>

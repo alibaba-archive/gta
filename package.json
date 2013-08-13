@@ -3,8 +3,7 @@
   "version": "0.0.3",
   "description": "group teambition analysis tool",
   "main": "lib/index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git@github.com:teambition/gta"
@@ -18,5 +17,8 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/teambition/gta/issues"
+  },
+  "devDependencies": {
+    "cake-dog": "~0.1.3"
   }
 }

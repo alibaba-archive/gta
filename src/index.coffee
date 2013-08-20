@@ -8,7 +8,7 @@ class Gta
     for provider, option of options
       Provider = Gta["#{provider[0].toUpperCase()}#{provider[1..]}"]
       @providers[provider] = new Provider(option) if Provider?
-    @delegateEvents() if window.jQuery 
+    @delegateEvents() if window.jQuery
 
   pageview: ->
     for name, provider of @providers
@@ -42,7 +42,6 @@ class Gta
     constructor: (option) ->
       @option = option
       @option.account = option.account or ''
-      @_q = @_initial()
 
   class @Google extends @Base
 
@@ -64,12 +63,11 @@ class Gta
     pageview: ->
       args = (val for i, val of arguments)
       data = if typeof args[0] == 'object' then args[0] else args.join('_')
-      @_q('send', 'pageview', data)
+      window.ga('send', 'pageview', data)
 
     event: ->
       args = (val for i, val of arguments)
-      data = ['send', 'event'].concat(args)
-      @_q.apply(@_q, data)
+      window.ga('send', 'events', args)
 
   class @Baidu extends @Base
 
@@ -100,11 +98,11 @@ class Gta
           data = data.join('_')
       else
         data = args.join('_')
-      @_q.push(['_trackPageview', data])
+      window._hmt.push(['_trackPageview', data])
 
     event: ->
       args = (val for i, val of arguments)
       data = ['_trackEvent'].concat(args)
-      @_q.push(data)
+      window._htm.push(data)
 
 exports.Gta = Gta

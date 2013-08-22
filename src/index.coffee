@@ -42,6 +42,7 @@ class Gta
     constructor: (option) ->
       @option = option
       @option.account = option.account or ''
+      @_initial()
 
   class @Google extends @Base
 
@@ -63,11 +64,11 @@ class Gta
     pageview: ->
       args = (val for i, val of arguments)
       data = if typeof args[0] == 'object' then args[0] else args.join('_')
-      window.ga('send', 'pageview', data)
+      window.ga?('send', 'pageview', data)
 
     event: ->
       args = (val for i, val of arguments)
-      window.ga('send', 'events', args)
+      window.ga?('send', 'events', args)
 
   class @Baidu extends @Base
 
@@ -98,11 +99,11 @@ class Gta
           data = data.join('_')
       else
         data = args.join('_')
-      window._hmt.push(['_trackPageview', data])
+      window._hmt?.push(['_trackPageview', data])
 
     event: ->
       args = (val for i, val of arguments)
       data = ['_trackEvent'].concat(args)
-      window._htm.push(data)
+      window._hmt?.push(data)
 
 exports.Gta = Gta

@@ -1,6 +1,6 @@
 {
   "name": "gta",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "group teambition analysis tool",
   "main": "lib/index.js",
   "scripts": {},

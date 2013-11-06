@@ -14,10 +14,13 @@ Then, include the following script in your html and you are ready to go:
 <script>
     gta = new Gta({
         Google: {
-            account: 'UA-33186961-1'
+            account: 'UA-33126961-2'
         },
         Baidu: {
-            account: 'ec912ecc405ccd050e4cdf452ef4e85a'
+            account: 'ec912ecc405cdd051e4cdf452ef4e85a'
+        },
+        Mixpanel: {
+            account: 'a037806461asc4a8c3dc1bca7a821e4c'
         }
     });
 </script>
@@ -28,13 +31,13 @@ Then, include the following script in your html and you are ready to go:
 Call the `pageview` function to record a new page view:
 ```
 // use single object
-gta.pageview({  
+gta.pageview({
     'page': '/my-overridden-page?id=1',
     'title': 'my overridden page'
 })
 
 // use multiple string
-gta.pageview('/api/hello', '?world'); 
+gta.pageview('/api/hello', '?world');
 ```
 
 # Events
@@ -53,3 +56,4 @@ If `data-label` `data-action` `data-category` `data-value` is not provided then 
 
 * [google](https://developers.google.com/analytics/devguides/collection/analyticsjs/)
 * [baidu](http://tongji.baidu.com/open/api/more?p=ref_trackPageview)
+* [Mixpanel](https://mixpanel.com/help/reference)

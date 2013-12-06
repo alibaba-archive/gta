@@ -126,6 +126,6 @@ class Gta
       # Mixpanel does not support pageview
 
     event: ->
-      mixpanel.track(arguments[3])
+      mixpanel.track(arguments[2])
 
 exports.Gta = Gta

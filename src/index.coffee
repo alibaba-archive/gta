@@ -27,7 +27,8 @@ class Gta
       label = $target.data('label') or $target[0].className
       action = $target.data('action') or e.type
       value = $target.data('value') or $target.html()
-      @event(category, action, label, value)
+      useMixpanel = not not $target.data('useMixpanel')
+      @event(category, action, label, value, useMixpanel)
     )
 
   @appendScript: (script) ->
@@ -125,7 +126,7 @@ class Gta
     pageview: ->
       # Mixpanel does not support pageview
 
-    event: ->
-      mixpanel.track(arguments[2])
+    event: (category, action, label, value, useMixpanel=false)->
+      useMixpanel and mixpanel.track(arguments[2])
 
 exports.Gta = Gta

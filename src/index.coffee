@@ -1,132 +1,183 @@
-exports = exports or this
+;((root, factory) ->
+  'use strict';
 
-class Gta
+  gta = factory()
+  if typeof module is 'object' and typeof module.exports is 'object'
+    module.exports = gta
+  else if typeof define is 'function' and define.amd
+    define(['jquery'], -> gta)
+  else
+    root.Gta = gta
 
-  constructor: (options) ->
-    @options = options
-    @providers = {}
-    for provider, option of options
-      Provider = Gta["#{provider[0].toUpperCase()}#{provider[1..]}"]
-      @providers[provider] = new Provider(option) if Provider?
-    @delegateEvents() if window.jQuery
+)(this, ->
+  'use strict';
 
-  pageview: ->
-    for name, provider of @providers
-      provider.pageview.apply(provider, arguments)
-    return this
+  slice = Array.prototype.slice
 
-  event: ->
-    for name, provider of @providers
-      provider.event.apply(provider, arguments)
-    return this
+  removeElement = (el) ->
+    el.parentNode.removeChild(el)
 
-  delegateEvents: ->
-    $(document).on('click.gta', '[data-gta="event"]', (e) =>
-      $target = $(e.currentTarget)
-      category = $target.data('category') or $target[0].tagName
-      label = $target.data('label') or $target[0].className
-      action = $target.data('action') or e.type
-      value = $target.data('value') or $target.html()
-      useMixpanel = not not $target.data('useMixpanel')
-      @event(category, action, label, value, useMixpanel)
+  checkScript = (scriptId, key) ->
+    return unless window.jQuery
+    $(->
+      return unless script = document.getElementById(scriptId);
+      script.onerror = ->
+        window[key] = null
+        removeElement(script)
+      script.onload = ->
+        removeElement(script)
     )
 
-  @appendScript: (script) ->
-    dom = document.createElement('script')
-    text = document.createTextNode(script)
-    dom.appendChild(text)
-    head = document.getElementsByTagName('head')[0]
-    head.appendChild(dom)
-
-  class @Base
-
-    constructor: (option) ->
-      @option = option
-      @option.account = option.account or ''
-      @_initial()
-
-  class @Google extends @Base
-
-    constructor: (option) ->
-      super
-
-    _initial: ->
-      unless window.ga?
-        Gta.appendScript("""
-          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script',('https:'===window.location.protocol?'https:':'http:') + '//www.google-analytics.com/analytics.js','ga');
-          ga('create', '#{@option.account}');
-          ga('send', 'pageview');
-        """)
-      return window.ga
-
+  gta = {
     pageview: ->
-      args = (val for i, val of arguments)
-      data = if typeof args[0] == 'object' then args[0] else args.join('_')
-      window.ga?('send', 'pageview', data)
+      for provider in providers
+        provider.pageview.apply(provider, arguments)
+      return this
 
     event: ->
-      args = (val for i, val of arguments)
-      window.ga?('send', 'events', args)
+      for provider in providers
+        provider.event.apply(provider, arguments)
+      return this
 
-  class @Baidu extends @Base
+    delegateEvents: ->
+      return unless window.jQuery
+      $(document).off('.gta').on('click.gta', '[data-gta="event"]', (e) =>
+        $target = $(e.currentTarget)
+        category = $target.data('category') or $target[0].tagName
+        label = $target.data('label') or $target[0].className
+        action = $target.data('action') or e.type
+        value = $target.data('value') or $target.html()
+        useMixpanel = !!$target.data('useMixpanel')
+        @event(category, action, label, value, useMixpanel)
+      )
 
-    constructor: (option) ->
-      super
+  }
 
-    _initial: ->
-      unless window._hmt?
-        Gta.appendScript("""
-          var _hmt = _hmt || [];
-          (function() {
-            var hm = document.createElement("script");
-            hm.src = ('https:'===window.location.protocol?'https:':'http:') + "//hm.baidu.com/hm.js?#{@option.account}";
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
-          })();
-        """)
-      return window._hmt
+  Providers = {
+    google: (account) ->
+      return unless account
+      window.GoogleAnalyticsObject = '_ga';
+      window._ga = ->
+        _ga.q.push(arguments)
 
-    pageview: ->
-      args = (val for i, val of arguments)
-      if typeof args[0] == 'object'
-        if args[0]['page']?
-          data = args[0]['page']
+      _ga.q = []
+      _ga.l = 1 * new Date()
+      _ga('create', account)
+      _ga('send', 'pageview')
+
+      checkScript('gta-google', '_ga')
+
+      return {
+        name: 'google'
+        pageview: ->
+          return unless window._ga
+          args = slice.call(arguments)
+          data = if typeof args[0] is 'object' then args[0] else args.join('_')
+          window._ga('send', 'pageview', data)
+
+        event: ->
+          return unless window._ga
+          window._ga('send', 'events', slice.call(arguments))
+      }
+
+    baidu: (account) ->
+      return unless account
+      window._hmt = []
+
+      checkScript('gta-baidu', '_hmt')
+
+      return {
+        name: 'baidu'
+        pageview: ->
+          return unless window._hmt
+          args = slice.call(arguments)
+          if typeof args[0] == 'object'
+            data = args[0].page
+            unless data
+              data = []
+              for key, val of args[0]
+                data.push(val)
+              data = data.join('_')
+          else
+            data = args.join('_')
+          window._hmt.push(['_trackPageview', data])
+
+        event: ->
+          return unless window._hmt
+          args = slice.call(arguments)
+          data = ['_trackEvent'].concat(args)
+          window._hmt.push(data)
+      }
+
+    mixpanel: (account) ->
+      return unless account
+      lib_name = 'mixpanel';
+      window.mixpanel = [];
+      mixpanel._i = [];
+
+      mixpanel.init = (token, config, name) ->
+        # support multiple mixpanel instances
+        target = mixpanel
+        if name?
+          target = mixpanel[name] = []
         else
-          data = for i, v of args[0]
-            v
-          data = data.join('_')
-      else
-        data = args.join('_')
-      window._hmt?.push(['_trackPageview', data])
+          name = lib_name;
 
-    event: ->
-      args = (val for i, val of arguments)
-      data = ['_trackEvent'].concat(args)
-      window._hmt?.push(data)
+        # Pass in current people object if it exists
+        target.people or= []
 
-  class @Mixpanel extends @Base
+        target.toString = (no_stub) ->
+          str = lib_name
+          str += '.' + name if name isnt lib_name
+          str += ' (stub)' unless no_stub
+          return str
 
-    constructor: (options) ->
-      super
+        target.people.toString = ->
+          target.toString(1) + '.people (stub)'
 
-    _initial: ->
-      unless window.Mixpanel
-        Gta.appendScript("""
-          (function(e,b){if(!b.__SV){var a,f,i,g;window.mixpanel=b;a=e.createElement('script');a.type='text/javascript';a.async=!0;a.src=('https:'===e.location.protocol?'https:':'http:')+'//cdn.mxpnl.com/libs/mixpanel-2.2.min.js';f=e.getElementsByTagName('script')[0];f.parentNode.insertBefore(a,f);b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split('.');2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;'undefined'!==
-          typeof d?c=b[d]=[]:d='mixpanel';c.people=c.people||[];c.toString=function(b){var a='mixpanel';'mixpanel'!==d&&(a+='.'+d);b||(a+=' (stub)');return a};c.people.toString=function(){return c.toString(1)+'.people (stub)'};i='disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.track_charge people.clear_charges people.delete_user'.split(' ');for(g=0;g<i.length;g++)f(c,i[g]);
-          b._i.push([a,e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);
-          mixpanel.init('#{@option.account}');
-        """)
+        _set_and_defer = (target, fn) ->
+          split = fn.split('.')
+          if split.length is 2
+            target = target[split[0]]
+            fn = split[1]
 
-      return window.mixpanel
+          target[fn] = ->
+            target.push([fn].concat(slice.call(arguments)))
 
-    pageview: ->
-      # Mixpanel does not support pageview
+        functions = 'disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.track_charge people.clear_charges people.delete_user'.split(' ')
 
-    event: (category, action, label, value, useMixpanel=false)->
-      useMixpanel and mixpanel.track(arguments[2])
+        for fn in functions
+          _set_and_defer(target, fn)
 
-exports.Gta = Gta
+        mixpanel._i.push([token, config, name])
+
+      mixpanel.__SV = 1.2
+      mixpanel.init(account)
+
+      checkScript('gta-mixpanel', lib_name)
+
+      return {
+        name: 'mixpanel'
+        pageview: ->
+          # Mixpanel does not support pageview
+
+        event: (category, action, label, value, useMixpanel=false)->
+          return unless window.mixpanel and useMixpanel
+          window.mixpanel.track(arguments[2])
+      }
+
+  }
+
+  element = document.getElementById('gta-main')
+
+  providers = gta.providers = []
+  for name, Provider of Providers
+    account = element.getAttribute("data-#{name}")
+    if account and provider = Provider(account)
+      providers.push(provider)
+
+  gta.delegateEvents()
+  removeElement(element)
+  return gta
+
+)

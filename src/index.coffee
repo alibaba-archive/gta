@@ -169,8 +169,10 @@
   }
 
   element = document.getElementById('gta-main')
-
   providers = gta.providers = []
+
+  return gta unless element
+
   for name, Provider of Providers
     account = element.getAttribute("data-#{name}")
     if account and provider = Provider(account)

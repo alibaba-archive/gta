@@ -10,20 +10,11 @@ bower install gta
 Then, include the following script in your html and you are ready to go:
 
 ```
-<script src="bower_component/gta/lib/index.js"></script>
-<script>
-    gta = new Gta({
-        Google: {
-            account: 'UA-33126961-2'
-        },
-        Baidu: {
-            account: 'ec912ecc405cdd051e4cdf452ef4e85a'
-        },
-        Mixpanel: {
-            account: 'a037806461asc4a8c3dc1bca7a821e4c'
-        }
-    });
-</script>
+<script id="gta-main" src="bower_component/gta/lib/index.js" data-baidu="ec912ecc405ccd050e4cdf452ef4xxxx" data-google="UA-3318xxxx-1" data-mixpanel="a0378064615fc4a8c3dc1bca7a82xxxx"></script>
+<script src="test.js"></script>
+<script id="gta-baidu" src="https://hm.baidu.com/hm.js?ec912ecc405ccd050e4cdf452ef4xxxx" async></script>
+<script id="gta-mixpanel" src="https://cdn.mxpnl.com/libs/mixpanel-2.2.min.js" async></script>
+<script id="gta-google" src="https://www.google-analytics.com/analytics.js" async></script>
 ```
 
 # Page View

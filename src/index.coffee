@@ -17,16 +17,20 @@
   removeElement = (el) ->
     el.parentNode.removeChild(el)
 
-  checkScript = (scriptId, key) ->
-    return unless window.jQuery
-    $(->
-      return unless script = document.getElementById(scriptId);
-      script.onerror = ->
-        window[key] = null
-        removeElement(script)
-      script.onload = ->
-        removeElement(script)
-    )
+  checkScript = (script, key) ->
+    script.onerror = ->
+      window[key] = null
+      removeElement(script)
+    script.onload = ->
+      removeElement(script)
+
+  getScript = (src) ->
+    script = document.createElement('script')
+    scripts = document.getElementsByTagName('script')[0]
+    script.async = 1
+    script.src = src
+    scripts.parentNode.insertBefore(script, scripts)
+    return script
 
   gta = {
     pageview: ->
@@ -64,8 +68,8 @@
       _ga.l = 1 * new Date()
       _ga('create', account)
       _ga('send', 'pageview')
-
-      checkScript('gta-google', '_ga')
+      script = getScript('//www.google-analytics.com/analytics.js')
+      checkScript(script, '_ga')
 
       return {
         name: 'google'
@@ -83,8 +87,8 @@
     baidu: (account) ->
       return unless account
       window._hmt = []
-
-      checkScript('gta-baidu', '_hmt')
+      script = getScript("//hm.baidu.com/hm.js?#{account}")
+      checkScript(script, '_hmt')
 
       return {
         name: 'baidu'
@@ -153,8 +157,8 @@
 
       mixpanel.__SV = 1.2
       mixpanel.init(account)
-
-      checkScript('gta-mixpanel', lib_name)
+      script = getScript('//cdn.mxpnl.com/libs/mixpanel-2.2.min.js')
+      checkScript(script, lib_name)
 
       return {
         name: 'mixpanel'

@@ -1,6 +1,6 @@
 {
   "name": "gta",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "main": "lib/index.js",
   "ignore": [
     "**/.*",
@@ -10,6 +10,6 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~2.0.3"
+    "jquery": ">=1.7.0"
   }
 }

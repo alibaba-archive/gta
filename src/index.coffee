@@ -82,7 +82,8 @@
 
         event: ->
           return unless window._ga
-          window._ga('send', 'events', slice.call(arguments))
+          args = ['send', 'event'].concat(slice.call(arguments))
+          window._ga.apply(null, args)
       }
 
     baidu: (account) ->

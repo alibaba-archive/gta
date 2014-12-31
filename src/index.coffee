@@ -50,7 +50,7 @@
         category = $target.data('category') or $target[0].tagName
         label = $target.data('label') or $target[0].className
         action = $target.data('action') or e.type
-        value = $target.data('value') or $target.html()
+        value = parseInt($target.data('value'))
         useMixpanel = !!$target.data('useMixpanel')
         @event(category, action, label, value, useMixpanel)
       )
@@ -80,9 +80,10 @@
           data = if typeof args[0] is 'object' then args[0] else args.join('_')
           window._ga('send', 'pageview', data)
 
-        event: ->
+        event: (category, action, label, value) ->
           return unless window._ga
-          args = ['send', 'event'].concat(slice.call(arguments))
+          args = ['send', 'event', category, action, label]
+          args.push(+value) if value > 0
           window._ga.apply(null, args)
       }
 
@@ -108,11 +109,11 @@
             data = args.join('_')
           window._hmt.push(['_trackPageview', data])
 
-        event: ->
+        event: (category, action, label, value) ->
           return unless window._hmt
-          args = slice.call(arguments)
-          data = ['_trackEvent'].concat(args)
-          window._hmt.push(data)
+          args = ['_trackEvent', category, action, label]
+          args.push(+value) if value > 0
+          window._hmt.push(args)
       }
 
     mixpanel: (account) ->

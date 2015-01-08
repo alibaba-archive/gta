@@ -9,7 +9,7 @@
   else
     root.Gta = gta
 
-)(this, ->
+)((if typeof window is 'object' then window else this), ->
   'use strict';
 
   slice = Array.prototype.slice
@@ -44,15 +44,17 @@
       return this
 
     delegateEvents: ->
-      return unless window.jQuery
+      return unless $
       $(document).off('.gta').on('click.gta', '[data-gta="event"]', (e) =>
         $target = $(e.currentTarget)
-        category = $target.data('category') or $target[0].tagName
-        label = $target.data('label') or $target[0].className
+        category = $target.data('category')
+        unless category
+          category = $target.closest('[data-category]').data('category')
         action = $target.data('action') or e.type
+        label = $target.data('label')
         value = parseInt($target.data('value'))
-        useMixpanel = !!$target.data('useMixpanel')
-        @event(category, action, label, value, useMixpanel)
+        useMixpanel = !!$target.data('mixpanel')
+        @event(category or 'gta', action, label, value, useMixpanel)
       )
 
   }
@@ -170,7 +172,17 @@
 
         event: (category, action, label, value, useMixpanel=false)->
           return unless window.mixpanel and useMixpanel
-          window.mixpanel.track(arguments[2])
+          if not action or typeof action is 'object'
+            data = action or {}
+            action = category
+          else
+            data = {
+              category: category
+              label: label
+              value: value
+            }
+
+          window.mixpanel.track(action, data)
       }
 
   }

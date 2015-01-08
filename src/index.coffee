@@ -34,13 +34,17 @@
 
   gta = {
     pageview: ->
-      for provider in providers
-        provider.pageview.apply(provider, arguments)
+      try
+        for provider in providers
+          provider.pageview.apply(provider, arguments)
+      catch e
       return this
 
     event: ->
-      for provider in providers
-        provider.event.apply(provider, arguments)
+      try
+        for provider in providers
+          provider.event.apply(provider, arguments)
+      catch e
       return this
 
     delegateEvents: ->

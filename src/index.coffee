@@ -13,6 +13,7 @@
   'use strict';
 
   slice = Array.prototype.slice
+  $body = null
 
   removeElement = (el) ->
     el.parentNode.removeChild(el)
@@ -42,6 +43,7 @@
 
     event: ->
       try
+        arguments[0] or= $body?.data('category') or 'gta'
         for provider in providers
           provider.event.apply(provider, arguments)
       catch e
@@ -49,6 +51,7 @@
 
     delegateEvents: ->
       return unless $
+      $body = $('body')
       $(document).off('.gta').on('click.gta', '[data-gta="event"]', (e) =>
         $target = $(e.currentTarget)
         category = $target.data('category')
@@ -58,7 +61,7 @@
         label = $target.data('label')
         value = parseInt($target.data('value'))
         useMixpanel = !!$target.data('mixpanel')
-        @event(category or 'gta', action, label, value, useMixpanel)
+        @event(category, action, label, value, useMixpanel)
       )
 
   }

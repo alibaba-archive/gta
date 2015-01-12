@@ -75,7 +75,8 @@
 
       _ga.q = []
       _ga.l = 1 * new Date()
-      _ga('create', account)
+      _ga('create', account, 'auto')
+      _ga('require', 'displayfeatures')
       _ga('require', 'linkid', 'linkid.js')
       _ga('send', 'pageview')
       script = getScript('//www.google-analytics.com/analytics.js')

@@ -50,7 +50,7 @@
       return this
 
     delegateEvents: ->
-      return unless $
+      return unless window.$
       $body = $('body')
       $(document).off('.gta').on('click.gta', '[data-gta="event"]', (e) =>
         $target = $(e.currentTarget)

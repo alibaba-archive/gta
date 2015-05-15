@@ -34,6 +34,13 @@
     return script
 
   gta = {
+    setUserId: (id) ->
+      try
+        for provider in providers
+          provider.setUserId?.apply(provider, id)
+      catch e
+      return this
+
     pageview: ->
       try
         for provider in providers
@@ -60,8 +67,7 @@
         action = $target.data('action') or e.type
         label = $target.data('label')
         value = parseInt($target.data('value'))
-        useMixpanel = !!$target.data('mixpanel')
-        @event(category, action, label, value, useMixpanel)
+        @event(category, action, label, value)
       )
 
   }
@@ -126,71 +132,44 @@
           window._hmt.push(args)
       }
 
-    mixpanel: (account) ->
+    piwik: (account) ->
       return unless account
-      lib_name = 'mixpanel';
-      window.mixpanel = [];
-      mixpanel._i = [];
-
-      mixpanel.init = (token, config, name) ->
-        # support multiple mixpanel instances
-        target = mixpanel
-        if name?
-          target = mixpanel[name] = []
-        else
-          name = lib_name;
-
-        # Pass in current people object if it exists
-        target.people or= []
-
-        target.toString = (no_stub) ->
-          str = lib_name
-          str += '.' + name if name isnt lib_name
-          str += ' (stub)' unless no_stub
-          return str
-
-        target.people.toString = ->
-          target.toString(1) + '.people (stub)'
-
-        _set_and_defer = (target, fn) ->
-          split = fn.split('.')
-          if split.length is 2
-            target = target[split[0]]
-            fn = split[1]
-
-          target[fn] = ->
-            target.push([fn].concat(slice.call(arguments)))
-
-        functions = 'disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.track_charge people.clear_charges people.delete_user'.split(' ')
-
-        for fn in functions
-          _set_and_defer(target, fn)
-
-        mixpanel._i.push([token, config, name])
-
-      mixpanel.__SV = 1.2
-      mixpanel.init(account)
-      script = getScript('//cdn.mxpnl.com/libs/mixpanel-2.2.min.js')
-      checkScript(script, lib_name)
+      url = '//piwik.teambition.com'
+      window._paq = [
+        ['trackPageView'],
+        ['enableLinkTracking'],
+        ['setTrackerUrl', "#{url}/piwik.php"],
+        ['setSiteId', account]
+      ]
+      script = getScript("#{url}/piwik.js")
+      checkScript(script, '_paq')
 
       return {
-        name: 'mixpanel'
+        name: 'piwik'
+        setUserId: (id) ->
+          return unless window._paq
+          window._paq.push(['setUserId', id])
+
         pageview: ->
-          # Mixpanel does not support pageview
-
-        event: (category, action, label, value, useMixpanel=false)->
-          return unless window.mixpanel and useMixpanel
-          if not action or typeof action is 'object'
-            data = action or {}
-            action = category
+          return unless window._paq
+          args = slice.call(arguments)
+          if typeof args[0] == 'object'
+            data = args[0].page
+            unless data
+              data = []
+              for key, val of args[0]
+                data.push(val)
+              data = data.join('_')
           else
-            data = {
-              category: category
-              label: label
-              value: value
-            }
+            data = args.join('_')
+          window._paq.push(['trackPageView', data])
 
-          window.mixpanel.track(action, data)
+        event: (category, action, label, value) ->
+          return unless window._paq
+          args = ['trackEvent', category, action, label]
+          args.push(+value) if value > 0
+          window._paq.push(args)
+
       }
 
   }

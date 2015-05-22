@@ -132,16 +132,15 @@
           window._hmt.push(args)
       }
 
-    piwik: (account) ->
-      return unless account
-      url = '//piwik.teambition.com'
+    piwik: (account, scriptUrl, trackUrl) ->
+      return unless account and scriptUrl and trackUrl
       window._paq = [
         ['trackPageView'],
         ['enableLinkTracking'],
-        ['setTrackerUrl', "#{url}/piwik.php"],
+        ['setTrackerUrl', trackUrl],
         ['setSiteId', account]
       ]
-      script = getScript("#{url}/piwik.js")
+      script = getScript(scriptUrl)
       checkScript(script, '_paq')
 
       return {
@@ -181,7 +180,9 @@
 
   for name, Provider of Providers
     account = element.getAttribute("data-#{name}")
-    if account and provider = Provider(account)
+    scriptUrl = element.getAttribute("data-#{name}-script")
+    trackUrl = element.getAttribute("data-#{name}-track")
+    if account and provider = Provider(account, scriptUrl, trackUrl)
       providers.push(provider)
 
   gta.delegateEvents()

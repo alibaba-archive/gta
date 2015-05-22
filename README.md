@@ -10,7 +10,12 @@ bower install gta
 Then, include the following script in your html and you are ready to go:
 
 ```
-<script id="gta-main" src="bower_component/gta/lib/index.js" data-baidu="ec912ecc405ccd050e4cdf452ef4xxxx" data-google="UA-3318xxxx-1" data-piwik="teambition-web"></script>
+<script id="gta-main" src="bower_component/gta/lib/index.js"
+  data-baidu="ec912ecc405ccd050e4cdf452ef4xxxx"
+  data-google="UA-3318xxxx-1"
+  data-piwik="1"
+  data-piwik-track="https://piwik.teambition.com/piwik.php"
+  data-piwik-script="https://dn-st.b0.upaiyun.com/libs/piwik/v2/piwik.js"></script>
 ```
 
 ### set userID

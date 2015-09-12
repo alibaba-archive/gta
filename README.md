@@ -54,4 +54,3 @@ If `data-label` `data-action` `data-category` `data-value` is not provided then 
 
 * [google](https://developers.google.com/analytics/devguides/collection/analyticsjs/)
 * [baidu](http://tongji.baidu.com/open/api/more?p=ref_trackPageview)
-* [Mixpanel](http://piwik.org/)

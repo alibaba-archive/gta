@@ -170,6 +170,48 @@
           window._paq.push(args)
 
       }
+    # segment.com
+    segment: (account) ->
+      return unless account
+      analytics = window.analytics = window.analytics or []
+
+      analytics.invoked = true
+      analytics.methods = ['trackSubmit', 'trackClick', 'trackLink', 'trackForm', 'pageview', 'identify', 'reset', 'group', 'track', 'ready', 'alias', 'page', 'once', 'off', 'on']
+      analytics.factory = (method) ->
+        return ->
+          args = slice.call(arguments)
+          args.unshift(method)
+          analytics.push(args)
+          return analytics
+
+      for method in analytics.methods
+        analytics[method] = analytics.factory(method)
+
+      analytics.SNIPPET_VERSION = '3.1.0'
+      script = getScript("//cdn.segment.com/analytics.js/v1/#{account}/analytics.min.js")
+      checkScript(script, 'analytics')
+      analytics.page()
+
+      return {
+        name: 'segment'
+        setUserId: (id) ->
+          analytics.identify(id, {})
+          return unless window.analytics
+          analytics.identify(id, {})
+
+        pageview: (data)->
+          return unless window.identify
+          analytics.page(data.page, data.title)
+
+        event: (category, action, label, value) ->
+          return unless window.identify
+          data = {
+        	  action: action
+        	  label: label
+        	}
+          data.value = value if value > 0
+          analytics.track(category, data)
+      }
 
   }
 

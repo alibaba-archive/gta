@@ -205,11 +205,11 @@
         event: (category, action, label, value) ->
           return unless window.analytics
           data = {
-        	  action: action
+        	  category: category
         	  label: label
         	}
           data.value = value if value > 0
-          analytics.track(category, data)
+          analytics.track(action, data)
       }
   }
 

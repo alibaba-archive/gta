@@ -34,10 +34,10 @@
     return script
 
   gta = {
-    setUserId: (id) ->
+    setUser: (id, user) ->
       try
         for provider in providers
-          provider.setUserId?.apply(provider, id)
+          provider.setUser?.call(provider, id, user)
       catch e
       return this
 
@@ -145,7 +145,7 @@
 
       return {
         name: 'piwik'
-        setUserId: (id) ->
+        setUser: (id) ->
           return unless window._paq
           window._paq.push(['setUserId', id])
 
@@ -194,17 +194,16 @@
 
       return {
         name: 'segment'
-        setUserId: (id) ->
-          analytics.identify(id, {})
+        setUser: (id, user) ->
           return unless window.analytics
-          analytics.identify(id, {})
+          analytics.identify(id, user)
 
         pageview: (data)->
-          return unless window.identify
+          return unless window.analytics
           analytics.page(data.page, data.title)
 
         event: (category, action, label, value) ->
-          return unless window.identify
+          return unless window.analytics
           data = {
         	  action: action
         	  label: label
@@ -212,7 +211,6 @@
           data.value = value if value > 0
           analytics.track(category, data)
       }
-
   }
 
   element = document.getElementById('gta-main')

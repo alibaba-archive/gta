@@ -195,21 +195,18 @@
       return {
         name: 'segment'
         setUser: (id, user) ->
-          return unless window.analytics
-          analytics.identify(id, user)
+          window.analytics?.identify(id, user)
 
         pageview: (data)->
-          return unless window.analytics
-          analytics.page(data.page, data.title)
+          window.analytics?.page(data.page, data.title)
 
         event: (category, action, label, value) ->
-          return unless window.analytics
           data = {
         	  category: category
         	  label: label
         	}
           data.value = value if value > 0
-          analytics.track(action, data)
+          window.analytics?.track(action, data)
       }
   }
 

@@ -202,12 +202,13 @@
 
         event: (category, action, label, value) ->
           data = {
+            platform: 'web'
             category: category
             action: action
             label: label
           }
           data.value = value if value > 0
-          window.analytics?.track("#{category}:#{label}:#{action}", data)
+          window.analytics?.track(label, data)
       }
   }
 

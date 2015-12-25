@@ -3,8 +3,15 @@
 ## Usage
 
 First, use bower to install gta:
-```
+
+```bash
 bower install gta
+```
+
+or with npm:
+
+```bash
+npm i --save teambition-gta
 ```
 
 Then, include the following script in your html and you are ready to go:

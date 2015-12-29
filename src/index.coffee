@@ -1,5 +1,5 @@
-;((root, factory) ->
-  'use strict';
+((root, factory) ->
+  'use strict'
 
   gta = factory()
   if typeof module is 'object' and typeof module.exports is 'object'
@@ -10,7 +10,7 @@
     root.Gta = gta
 
 )((if typeof window is 'object' then window else this), ->
-  'use strict';
+  'use strict'
 
   slice = Array.prototype.slice
   $body = null
@@ -130,6 +130,73 @@
           args = ['_trackEvent', category, action, label]
           args.push(+value) if value > 0
           window._hmt.push(args)
+      }
+
+    mixpanel: (account) ->
+      return unless account
+      lib_name = 'mixpanel';
+      window.mixpanel = [];
+      mixpanel._i = [];
+
+      mixpanel.init = (token, config, name) ->
+        # support multiple mixpanel instances
+        target = mixpanel
+        if name?
+          target = mixpanel[name] = []
+        else
+          name = lib_name;
+
+        # Pass in current people object if it exists
+        target.people or= []
+
+        target.toString = (no_stub) ->
+          str = lib_name
+          str += '.' + name if name isnt lib_name
+          str += ' (stub)' unless no_stub
+          return str
+
+        target.people.toString = ->
+          target.toString(1) + '.people (stub)'
+
+        _set_and_defer = (target, fn) ->
+          split = fn.split('.')
+          if split.length is 2
+            target = target[split[0]]
+            fn = split[1]
+
+          target[fn] = ->
+            target.push([fn].concat(slice.call(arguments)))
+
+        functions = [
+          'disable', 'track', 'track_pageview', 'track_links', 'track_forms', 'register',
+          'register_once', 'alias', 'unregister', 'identify', 'name_tag', 'set_config',
+          'people.set', 'people.set_once', 'people.increment', 'people.append',
+          'people.track_charge', 'people.clear_charges', 'people.delete_user'
+        ]
+
+        for fn in functions
+          _set_and_defer(target, fn)
+
+        mixpanel._i.push([token, config, name])
+
+      mixpanel.__SV = 1.2
+      mixpanel.init(account)
+      script = getScript('//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js')
+      checkScript(script, lib_name)
+
+      return {
+        name: 'mixpanel'
+        pageview: ->
+          # Mixpanel does not support pageview
+
+        event: (category, action, label, value)->
+          data = {
+            platform: 'web'
+            category: category
+            action: action
+          }
+          data.value = value if value > 0
+          window.mixpanel?.track(label, data)
       }
 
     piwik: (account, scriptUrl, trackUrl) ->

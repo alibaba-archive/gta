@@ -23,13 +23,15 @@
       window[key] = null
       removeElement(script)
     script.onload = ->
-      removeElement(script)
+      # do not remove script attriubte if src of script is customer.io
+      removeElement(script) unless script.getAttribute('data-site-id')
 
-  getScript = (src) ->
+  getScript = (src, id) ->
     script = document.createElement('script')
     scripts = document.getElementsByTagName('script')[0]
     script.async = 1
     script.src = src
+    script.id = id if id
     scripts.parentNode.insertBefore(script, scripts)
     return script
 
@@ -237,45 +239,103 @@
           window._paq.push(args)
 
       }
-    # segment.com
-    segment: (account) ->
-      return unless account
-      analytics = window.analytics = window.analytics or []
+    # # segment.com
+    # segment: (account) ->
+    #   return unless account
+    #   analytics = window.analytics = window.analytics or []
+    #
+    #   analytics.invoked = true
+    #   analytics.methods = ['trackSubmit', 'trackClick', 'trackLink', 'trackForm', 'pageview', 'identify', 'reset', 'group', 'track', 'ready', 'alias', 'page', 'once', 'off', 'on']
+    #   analytics.factory = (method) ->
+    #     return ->
+    #       args = slice.call(arguments)
+    #       args.unshift(method)
+    #       analytics.push(args)
+    #       return analytics
+    #
+    #   for method in analytics.methods
+    #     analytics[method] = analytics.factory(method)
+    #
+    #   analytics.SNIPPET_VERSION = '3.1.0'
+    #   script = getScript("//cdn.segment.com/analytics.js/v1/#{account}/analytics.min.js")
+    #   checkScript(script, 'analytics')
+    #   analytics.page()
+    #
+    #   return {
+    #     name: 'segment'
+    #     setUser: (id, user) ->
+    #       window.analytics?.identify(id, user)
+    #
+    #     pageview: (data) ->
+    #       window.analytics?.page(data.page, data.title)
+    #
+    #     event: (category, action, label, value) ->
+    #       data = {
+    #         platform: 'web'
+    #         category: category
+    #         action: action
+    #         label: label
+    #       }
+    #       data.value = value if value > 0
+    #       window.analytics?.track(label, data)
+    #   }
 
-      analytics.invoked = true
-      analytics.methods = ['trackSubmit', 'trackClick', 'trackLink', 'trackForm', 'pageview', 'identify', 'reset', 'group', 'track', 'ready', 'alias', 'page', 'once', 'off', 'on']
-      analytics.factory = (method) ->
+    # customer.io
+    customer: (account) ->
+      return unless account
+      _cio = window._cio = window._cio or []
+      _cio.invoked = true
+      _cio.methods = [
+        'trackSubmit', 'trackClick', 'trackLink', 'trackForm',
+        'pageview', 'reset', 'group', 'ready', 'alias', 'page',
+        'once', 'off', 'on', 'load', 'identify', 'sidentify', 'track'
+      ]
+      _cio.factory = (method) ->
         return ->
           args = slice.call(arguments)
           args.unshift(method)
-          analytics.push(args)
-          return analytics
+          _cio.push(args)
+          return _cio
 
-      for method in analytics.methods
-        analytics[method] = analytics.factory(method)
+      for method in _cio.methods
+        _cio[method] = _cio.factory(method)
 
-      analytics.SNIPPET_VERSION = '3.1.0'
-      script = getScript("//cdn.segment.com/analytics.js/v1/#{account}/analytics.min.js")
-      checkScript(script, 'analytics')
-      analytics.page()
+      hasSet = false
+
+      setScript = (id = '') ->
+        return if hasSet
+        accounts = account.split(',')
+        # teambition polyfill
+        # if use Teambition as userid pick the first one [customer env=2015]
+        # use email as userid pick the second one [customer env=2016]
+        if id.indexOf('@') > 0
+          _account = accounts[1]
+        else
+          _account = accounts[0]
+        script = getScript '//assets.customer.io/assets/track.js', 'cio-tracker'
+        script.setAttribute 'data-site-id', _account
+        checkScript script, '_cio'
+        hasSet = true
 
       return {
-        name: 'segment'
+        name: 'customer'
         setUser: (id, user) ->
-          window.analytics?.identify(id, user)
+          setScript()
+          window._cio?.identify(id, user)
 
         pageview: (data) ->
-          window.analytics?.page(data.page, data.title)
+          setScript()
+          window._cio?.page(data.page, data.title)
 
         event: (category, action, label, value) ->
+          setScript()
           data = {
             platform: 'web'
             category: category
-            action: action
-            label: label
+            action: label
           }
           data.value = value if value > 0
-          window.analytics?.track(label, data)
+          window._cio?.track(label, data)
       }
   }
 

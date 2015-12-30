@@ -2,32 +2,33 @@
 
 ## Usage
 
-First, use bower to install gta:
+First, use Bower to install GTA:
 
 ```bash
 bower install gta
 ```
 
-or with npm:
+or with NPM:
 
 ```bash
 npm i --save teambition-gta
 ```
 
-Then, include the following script in your html and you are ready to go:
+Then, include the following script in your HTML and you are ready to go:
 
 ```
-<script id="gta-main" src="bower_component/gta/lib/index.js"
+<script id="gta-main"
+  src="bower_component/gta/lib/index.js"
   data-baidu="ec912ecc405ccd050e4cdf452ef4xxxx"
   data-google="UA-3318xxxx-1"
-  data-piwik="1"
-  data-piwik-track="https://piwik.teambition.com/piwik.php"
-  data-piwik-script="https://dn-st.b0.upaiyun.com/libs/piwik/v2/piwik.js"></script>
+  data-mixpanel="77e13d08ba42fe31932a1f1418aea7b2"
+  data-customer="2ac3fd02efd1f9c57ae9"
+></script>
 ```
 
-### set userID
+### Set User ID
 ```
-// currently only piwik support userId
+// Currently only piwik support userId
 gta.setUserId('userxxxxxid')
 ```
 
@@ -35,13 +36,13 @@ gta.setUserId('userxxxxxid')
 
 Call the `pageview` function to record a new page view:
 ```
-// use single object
+// Use single object
 gta.pageview({
     'page': '/my-overridden-page?id=1',
     'title': 'my overridden page'
 })
 
-// use multiple string
+// Use multiple string
 gta.pageview('/api/hello', '?world');
 ```
 
@@ -51,13 +52,16 @@ You can call the `event` function to track an event:
 ```
 gta.event('button', 'click', 'nav buttons', 4)  //@params: category, action, label, value
 ```
-Or, easily add `data-gta='event'` to a dom element as:
+Or, easily add `data-gta='event'` to a DOM element as:
 ```
 <button data-gta='event' data-label='clicked a button' data-action='click' data-category='button'>click</button>
 ```
 If `data-label` `data-action` `data-category` `data-value` is not provided then `className` `event type` `tagName` and `html` will be used instead.
 
-## Api Documents
+## API Documentations
 
-* [google](https://developers.google.com/analytics/devguides/collection/analyticsjs/)
-* [baidu](http://tongji.baidu.com/open/api/more?p=ref_trackPageview)
+* [Google Analytics](https://developers.google.com/analytics/devguides/collection/analyticsjs/)
+* [Baidu Analytics](http://tongji.baidu.com/open/api/more?p=ref_trackPageview)
+* [Mixpanel](https://mixpanel.com/help/reference/javascript)
+* [Piwik](http://developer.piwik.org/api-reference)
+* [Customer.io](https://customer.io/docs/api/javascript.html)

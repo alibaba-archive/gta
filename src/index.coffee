@@ -356,13 +356,13 @@
       checkScript(script)
 
       _fullstory.identify = (id, user) ->
-        _fullstory('user', {uid:id})
+        _fullstory('user', {uid: id})
         if user then _fullstory('user', user)
 
       _fullstory.setUserVars = (user) ->
         _fullstory('user', user)
 
-      _fullstory.identifyAccount = (id, user={}) ->
+      _fullstory.identifyAccount = (id, user = {}) ->
         user.acctId = id
         _fullstory('account', user)
 

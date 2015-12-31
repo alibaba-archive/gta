@@ -12,7 +12,9 @@
     "google",
     "baidu",
     "mixpanel",
-    "analysis"
+    "analysis",
+    "customer.io",
+    "fullstory"
   ],
   "author": "teambition",
   "license": "MIT",

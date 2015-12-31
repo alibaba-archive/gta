@@ -21,9 +21,7 @@
   },
   "devDependencies": {
     "grunt": "^0.4.4",
-    "grunt-contrib-coffee": "^0.10.1"
-  },
-  "dependencies": {
+    "grunt-contrib-coffee": "^0.10.1",
     "grunt-http-server": "^1.13.0"
   }
 }

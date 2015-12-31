@@ -6,5 +6,6 @@
     });
     window.Gta.event('button', 'click', 'test:nav buttons', 4);
   }
+  window.Gta.setUser('ahsuhgiuvesnfc', {name: 'User', email:'test@test.com'})
   $('body').append('<button data-gta="event" data-label="clicked an appended button">click again</button>');
 }())

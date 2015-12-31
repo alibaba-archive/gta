@@ -337,6 +337,40 @@
           data.value = value if value > 0
           window._cio?.track(label, data)
       }
+
+    fullstory: (account) ->
+      return unless account
+
+      _fullstory = window.FS = (id, user) ->
+        if _fullstory.q
+          _fullstory.q.push(arguments)
+        else
+          _fullstory._api(id, user)
+
+      _fullstory.q = []
+      _fs_debug = window._fs_debug = window._fs_debug or false
+      _fs_host = window._fs_host = window._fs_host or 'www.fullstory.com'
+      _fs_org = window['_fs_org'] = account
+
+      script = getScript("https://#{_fs_host}/s/fs.js")
+      checkScript(script)
+
+      _fullstory.identify = (id, user) ->
+        _fullstory('user', {uid: id})
+        if user then _fullstory('user', user)
+
+      _fullstory.setUserVars = (user) ->
+        _fullstory('user', user)
+
+      _fullstory.identifyAccount = (id, user = {}) ->
+        user.acctId = id
+        _fullstory('account', user)
+
+      return {
+        name: 'fullstory'
+        setUser: (id, user) ->
+          _fullstory.identify(id, user)
+      }
   }
 
   element = document.getElementById('gta-main')
@@ -348,6 +382,10 @@
     account = element.getAttribute("data-#{name}")
     scriptUrl = element.getAttribute("data-#{name}-script")
     trackUrl = element.getAttribute("data-#{name}-track")
+    randomProportion = element.getAttribute("data-#{name}-random-proportion")
+
+    continue if randomProportion and Math.random() > randomProportion
+
     if account and provider = Provider(account, scriptUrl, trackUrl)
       providers.push(provider)
 

@@ -382,6 +382,10 @@
     account = element.getAttribute("data-#{name}")
     scriptUrl = element.getAttribute("data-#{name}-script")
     trackUrl = element.getAttribute("data-#{name}-track")
+    randomProportion = element.getAttribute("data-#{name}-random-proportion")
+
+    continue if randomProportion and Math.random() > randomProportion
+
     if account and provider = Provider(account, scriptUrl, trackUrl)
       providers.push(provider)
 

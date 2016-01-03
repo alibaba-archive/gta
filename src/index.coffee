@@ -35,9 +35,30 @@
     scripts.parentNode.insertBefore(script, scripts)
     return script
 
+  initGta = ->
+    element = document.getElementById('gta-main')
+    providers = gta.providers = []
+
+    return gta unless element
+
+    for name, Provider of Providers
+      account = element.getAttribute("data-#{name}")
+      scriptUrl = element.getAttribute("data-#{name}-script")
+      trackUrl = element.getAttribute("data-#{name}-track")
+      randomProportion = element.getAttribute("data-#{name}-random-proportion")
+
+      continue if randomProportion and Math.random() > randomProportion
+
+      if account and provider = Provider(account, scriptUrl, trackUrl)
+        providers.push(provider)
+
+    gta.delegateEvents()
+    removeElement(element)
+
   gta = {
     setUser: (id, user) ->
       try
+        initGta()
         for provider in providers
           provider.setUser?.call(provider, id, user)
       catch e
@@ -292,43 +313,33 @@
       ]
       _cio.factory = (method) ->
         return ->
-          args = slice.call(arguments)
-          args.unshift(method)
-          _cio.push(args)
+          _cio.push([method].concat(Array.prototype.slice.call(arguments, 0)))
           return _cio
 
       for method in _cio.methods
         _cio[method] = _cio.factory(method)
 
-      hasSet = false
-
-      setScript = (id = '') ->
-        return if hasSet
-        accounts = account.split(',')
-        # teambition polyfill
-        # if use Teambition as userid pick the first one [customer env=2015]
-        # use email as userid pick the second one [customer env=2016]
-        if id.indexOf('@') > 0
-          _account = accounts[1]
-        else
-          _account = accounts[0]
-        script = getScript '//assets.customer.io/assets/track.js', 'cio-tracker'
-        script.setAttribute 'data-site-id', _account
-        checkScript script, '_cio'
-        hasSet = true
+      accounts = account.split(',')
+      # teambition polyfill
+      # if use Teambition as userid pick the first one [customer env=2015]
+      # use email as userid pick the second one [customer env=2016]
+      if id.indexOf('@') > 0
+        _account = accounts[1]
+      else
+        _account = accounts[0]
+      script = getScript '//assets.customer.io/assets/track.js', 'cio-tracker'
+      script.setAttribute 'data-site-id', _account
+      checkScript script, '_cio'
 
       return {
         name: 'customer'
         setUser: (id, user) ->
-          setScript()
           window._cio?.identify(id, user)
 
         pageview: (data) ->
-          setScript()
           window._cio?.page(data.page, data.title)
 
         event: (category, action, label, value) ->
-          setScript()
           data = {
             platform: 'web'
             category: category
@@ -373,24 +384,6 @@
       }
   }
 
-  element = document.getElementById('gta-main')
-  providers = gta.providers = []
-
-  return gta unless element
-
-  for name, Provider of Providers
-    account = element.getAttribute("data-#{name}")
-    scriptUrl = element.getAttribute("data-#{name}-script")
-    trackUrl = element.getAttribute("data-#{name}-track")
-    randomProportion = element.getAttribute("data-#{name}-random-proportion")
-
-    continue if randomProportion and Math.random() > randomProportion
-
-    if account and provider = Provider(account, scriptUrl, trackUrl)
-      providers.push(provider)
-
-  gta.delegateEvents()
-  removeElement(element)
   return gta
 
 )

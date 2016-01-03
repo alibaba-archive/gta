@@ -35,67 +35,6 @@
     scripts.parentNode.insertBefore(script, scripts)
     return script
 
-  initGta = ->
-    element = document.getElementById('gta-main')
-    providers = gta.providers = []
-
-    return gta unless element
-
-    for name, Provider of Providers
-      account = element.getAttribute("data-#{name}")
-      scriptUrl = element.getAttribute("data-#{name}-script")
-      trackUrl = element.getAttribute("data-#{name}-track")
-      randomProportion = element.getAttribute("data-#{name}-random-proportion")
-
-      continue if randomProportion and Math.random() > randomProportion
-
-      if account and provider = Provider(account, scriptUrl, trackUrl)
-        providers.push(provider)
-
-    gta.delegateEvents()
-    removeElement(element)
-    return providers
-
-  gta = {
-    setUser: (id, user) ->
-      try
-        providers = initGta()
-        for provider in providers
-          provider.setUser?.call(provider, id, user)
-      catch e
-      return this
-
-    pageview: ->
-      try
-        for provider in providers
-          provider.pageview.apply(provider, arguments)
-      catch e
-      return this
-
-    event: ->
-      try
-        arguments[0] or= $body?.data('category') or 'gta'
-        for provider in providers
-          provider.event.apply(provider, arguments)
-      catch e
-      return this
-
-    delegateEvents: ->
-      return unless window.$
-      $body = $('body')
-      $(document).off('.gta').on('click.gta', '[data-gta="event"]', (e) =>
-        $target = $(e.currentTarget)
-        category = $target.data('category')
-        unless category
-          category = $target.closest('[data-category]').data('category')
-        action = $target.data('action') or e.type
-        label = $target.data('label')
-        value = parseInt($target.data('value'))
-        @event(category, action, label, value)
-      )
-
-  }
-
   Providers = {
     google: (account) ->
       return unless account
@@ -393,6 +332,67 @@
         setUser: (id, user) ->
           _fullstory.identify(id, user)
       }
+  }
+
+  initGta = ->
+    element = document.getElementById('gta-main')
+    providers = gta.providers = []
+
+    return gta unless element
+
+    for name, Provider of Providers
+      account = element.getAttribute("data-#{name}")
+      scriptUrl = element.getAttribute("data-#{name}-script")
+      trackUrl = element.getAttribute("data-#{name}-track")
+      randomProportion = element.getAttribute("data-#{name}-random-proportion")
+
+      continue if randomProportion and Math.random() > randomProportion
+
+      if account and provider = Provider(account, scriptUrl, trackUrl)
+        providers.push(provider)
+
+    gta.delegateEvents()
+    removeElement(element)
+    return providers
+
+  gta = {
+    setUser: (id, user) ->
+      try
+        providers = initGta()
+        for provider in providers
+          provider.setUser?.call(provider, id, user)
+      catch e
+      return this
+
+    pageview: ->
+      try
+        for provider in providers
+          provider.pageview.apply(provider, arguments)
+      catch e
+      return this
+
+    event: ->
+      try
+        arguments[0] or= $body?.data('category') or 'gta'
+        for provider in providers
+          provider.event.apply(provider, arguments)
+      catch e
+      return this
+
+    delegateEvents: ->
+      return unless window.$
+      $body = $('body')
+      $(document).off('.gta').on('click.gta', '[data-gta="event"]', (e) =>
+        $target = $(e.currentTarget)
+        category = $target.data('category')
+        unless category
+          category = $target.closest('[data-category]').data('category')
+        action = $target.data('action') or e.type
+        label = $target.data('label')
+        value = parseInt($target.data('value'))
+        @event(category, action, label, value)
+      )
+
   }
 
   return gta

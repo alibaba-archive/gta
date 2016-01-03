@@ -54,11 +54,12 @@
 
     gta.delegateEvents()
     removeElement(element)
+    return providers
 
   gta = {
     setUser: (id, user) ->
       try
-        initGta()
+        providers = initGta()
         for provider in providers
           provider.setUser?.call(provider, id, user)
       catch e
@@ -304,42 +305,52 @@
     # customer.io
     customer: (account) ->
       return unless account
-      _cio = window._cio = window._cio or []
-      _cio.invoked = true
-      _cio.methods = [
-        'trackSubmit', 'trackClick', 'trackLink', 'trackForm',
-        'pageview', 'reset', 'group', 'ready', 'alias', 'page',
-        'once', 'off', 'on', 'load', 'identify', 'sidentify', 'track'
-      ]
-      _cio.factory = (method) ->
-        return ->
-          _cio.push([method].concat(Array.prototype.slice.call(arguments, 0)))
-          return _cio
+      initCustomer = (id) ->
+        _cio = window._cio = window._cio or []
+        _cio.invoked = true
+        _cio.methods = [
+          'trackSubmit', 'trackClick', 'trackLink', 'trackForm',
+          'pageview', 'reset', 'group', 'ready', 'alias', 'page',
+          'once', 'off', 'on', 'load', 'identify', 'sidentify', 'track'
+        ]
+        _cio.factory = (method) ->
+          return ->
+            _cio.push([method].concat(Array.prototype.slice.call(arguments, 0)))
+            return _cio
 
-      for method in _cio.methods
-        _cio[method] = _cio.factory(method)
+        for method in _cio.methods
+          _cio[method] = _cio.factory(method)
 
-      accounts = account.split(',')
-      # teambition polyfill
-      # if use Teambition as userid pick the first one [customer env=2015]
-      # use email as userid pick the second one [customer env=2016]
-      if id.indexOf('@') > 0
-        _account = accounts[1]
-      else
-        _account = accounts[0]
-      script = getScript '//assets.customer.io/assets/track.js', 'cio-tracker'
-      script.setAttribute 'data-site-id', _account
-      checkScript script, '_cio'
+        accounts = account.split(',')
+        # teambition polyfill
+        # if use Teambition as userid pick the first one [customer env=2015]
+        # use email as userid pick the second one [customer env=2016]
+        if id?.indexOf('@') > 0
+          _account = accounts[1]
+        else
+          _account = accounts[0]
+        script = getScript '//assets.customer.io/assets/track.js', 'cio-tracker'
+        script.setAttribute 'data-site-id', _account
+        checkScript script, '_cio'
 
       return {
         name: 'customer'
         setUser: (id, user) ->
-          window._cio?.identify(id, user)
+          initCustomer(id)
+          window._cio?.identify({
+            id: id,
+            name: user.name,
+            email: user.email,
+            created_at: Math.floor(new Date(user.createdAt).valueOf() / 1000),
+            language: user.language
+          })
 
         pageview: (data) ->
+          return unless account
           window._cio?.page(data.page, data.title)
 
         event: (category, action, label, value) ->
+          return unless account
           data = {
             platform: 'web'
             category: category

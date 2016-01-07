@@ -355,6 +355,8 @@
     removeElement(element)
     return providers
 
+  providers = []
+
   gta = {
     setUser: (id, user) ->
       try

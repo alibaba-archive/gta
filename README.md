@@ -49,9 +49,9 @@ gta.pageview('/api/hello', '?world');
 ### Events
 
 #### new rules:
-**('page' is equal to 'category', 'type' is equal to 'label')**
-1、data-gta属性 类似JSON的 {key: value}格式，不同的是key和value两端的引号可以省略；
-2、key 和 value 中不可以包含： 冒号、逗号、单引号、双引号。
+##### Tips: 'page' is equal to 'category', 'type' is equal to 'label'.
+1、data-gta属性 类似JSON的 {key: value}格式, 不同的是key和value两端的引号可以省略,
+2、key 和 value 中不可以包含: 冒号、逗号、单引号、双引号.
 
 You can call the `event` function to track an event:
 ```
@@ -65,7 +65,7 @@ Or, easily add `data-gta='event'` to a DOM element as:
 
 
 #### old rules:
-**(You can also use the old rules temporarily, but we advise you to use the new rules）**
+##### Tips: You can also use the old rules temporarily, but we advise you to use the new rules
 You can call the `event` function to track an event:
 ```
 gta.event('button', 'click', 'nav buttons', 4)  //@params: category, action, label

@@ -14,6 +14,7 @@
 
   slice = Array.prototype.slice
   $body = null
+  newGtaReg = /^\s*\{(.*)\}\s*$/
 
   removeElement = (el) ->
     el.parentNode.removeChild(el)
@@ -59,10 +60,12 @@
           data = if typeof args[0] is 'object' then args[0] else args.join('_')
           window._ga('send', 'pageview', data)
 
-        event: (category, action, label, value) ->
+        event: (gtaOptions) ->
           return unless window._ga
+          category = gtaOptions.page
+          action = gtaOptions.action
+          label = gtaOptions.type
           args = ['send', 'event', category, action, label]
-          args.push(+value) if value > 0
           window._ga.apply(null, args)
       }
 
@@ -88,10 +91,12 @@
             data = args.join('_')
           window._hmt.push(['_trackPageview', data])
 
-        event: (category, action, label, value) ->
+        event: (gtaOptions) ->
           return unless window._hmt
+          category = gtaOptions.page
+          action = gtaOptions.action
+          label = gtaOptions.type
           args = ['_trackEvent', category, action, label]
-          args.push(+value) if value > 0
           window._hmt.push(args)
       }
 
@@ -152,94 +157,11 @@
         pageview: ->
           # Mixpanel does not support pageview
 
-        event: (category, action, label, value)->
-          data = {
-            platform: 'web'
-            category: category
-            action: action
-          }
-          data.value = value if value > 0
-          window.mixpanel?.track(label, data)
+        event: (gtaOptions) ->
+          data = gtaOptions
+          data.platform = 'web'
+          window.mixpanel?.track(data.action, data)
       }
-
-    piwik: (account, scriptUrl, trackUrl) ->
-      return unless account and scriptUrl and trackUrl
-      window._paq = [
-        ['trackPageView'],
-        ['enableLinkTracking'],
-        ['setTrackerUrl', trackUrl],
-        ['setSiteId', account]
-      ]
-      script = getScript(scriptUrl)
-      checkScript(script, '_paq')
-
-      return {
-        name: 'piwik'
-        setUser: (id) ->
-          return unless window._paq
-          window._paq.push(['setUserId', id])
-
-        pageview: ->
-          return unless window._paq
-          args = slice.call(arguments)
-          if typeof args[0] == 'object'
-            data = args[0].page
-            unless data
-              data = []
-              for key, val of args[0]
-                data.push(val)
-              data = data.join('_')
-          else
-            data = args.join('_')
-          window._paq.push(['trackPageView', data])
-
-        event: (category, action, label, value) ->
-          return unless window._paq
-          args = ['trackEvent', category, action, label]
-          args.push(+value) if value > 0
-          window._paq.push(args)
-
-      }
-    # # segment.com
-    # segment: (account) ->
-    #   return unless account
-    #   analytics = window.analytics = window.analytics or []
-    #
-    #   analytics.invoked = true
-    #   analytics.methods = ['trackSubmit', 'trackClick', 'trackLink', 'trackForm', 'pageview', 'identify', 'reset', 'group', 'track', 'ready', 'alias', 'page', 'once', 'off', 'on']
-    #   analytics.factory = (method) ->
-    #     return ->
-    #       args = slice.call(arguments)
-    #       args.unshift(method)
-    #       analytics.push(args)
-    #       return analytics
-    #
-    #   for method in analytics.methods
-    #     analytics[method] = analytics.factory(method)
-    #
-    #   analytics.SNIPPET_VERSION = '3.1.0'
-    #   script = getScript("//cdn.segment.com/analytics.js/v1/#{account}/analytics.min.js")
-    #   checkScript(script, 'analytics')
-    #   analytics.page()
-    #
-    #   return {
-    #     name: 'segment'
-    #     setUser: (id, user) ->
-    #       window.analytics?.identify(id, user)
-    #
-    #     pageview: (data) ->
-    #       window.analytics?.page(data.page, data.title)
-    #
-    #     event: (category, action, label, value) ->
-    #       data = {
-    #         platform: 'web'
-    #         category: category
-    #         action: action
-    #         label: label
-    #       }
-    #       data.value = value if value > 0
-    #       window.analytics?.track(label, data)
-    #   }
 
     # customer.io
     customer: (account) ->
@@ -288,15 +210,11 @@
           return unless account
           window._cio?.page(data.page, data.title)
 
-        event: (category, action, label, value) ->
+        event: (gtaOptions) ->
           return unless account
-          data = {
-            platform: 'web'
-            category: category
-            action: label
-          }
-          data.value = value if value > 0
-          window._cio?.track(label, data)
+          data = gtaOptions
+          data.platform = 'web'
+          window._cio?.track(data.action, data)
       }
 
     fullstory: (account) ->
@@ -373,28 +291,65 @@
       catch e
       return this
 
-    event: ->
+    event: (gtaOptions) ->
       try
-        arguments[0] or= $body?.data('category') or 'gta'
-        for provider in providers
-          provider.event.apply(provider, arguments)
+        # new rules
+        isObject = typeof gtaOptions is 'object' and !!gtaOptions
+        if isObject
+          for provider in providers
+            provider.event?(gtaOptions)
+        # old rules
+        else
+          arguments[0] or= $body?.data('page') or $body?.data('category') or 'gta'
+          gtaOptions = {
+            page: arguments[0]
+            action: arguments[1]
+            type: arguments[2]
+          }
+          for provider in providers
+            provider.event?(gtaOptions)
       catch e
       return this
 
     delegateEvents: ->
       return unless window.$
       $body = $('body')
-      $(document).off('.gta').on('click.gta', '[data-gta="event"]', (e) =>
+      $(document).off('.gta').on('click.gta', '[data-gta]', (e) =>
         $target = $(e.currentTarget)
-        category = $target.data('category')
-        unless category
-          category = $target.closest('[data-category]').data('category')
-        action = $target.data('action') or e.type
-        label = $target.data('label')
-        value = parseInt($target.data('value'))
-        @event(category, action, label, value)
+        gtaString = $target.data('gta')
+        # new gta rule
+        if newGtaReg.test(gtaString)
+          gtaOptions = @parseGta(gtaString)
+        # old gta rule
+        else
+          category = $target.data('category')
+          unless category
+            category = $target.closest('[data-category]').data('category')
+          action = $target.data('action') or e.type
+          label = $target.data('label')
+          gtaOptions = {
+            page: category
+            action: action
+            type: label
+          }
+        @event(gtaOptions)
       )
 
+    # 新gta规则：
+    # gta两端由 引号、大括号包裹: "{}" 或 '{}'
+    # 大括号内部类似JSON的 {key: value}格式，不同的是key和value两端的引号可以省略，两端的空格会被省略,
+    # key 和 value 的值不可以包含： 冒号、逗号、单引号、双引号，
+    # e.g.  data-gta="{action: 'add content', 'page' : 'Project Page', type: task, control: tasks layout, 'method': double-click}"
+    parseGta: (gtaString) ->
+      gtaString = newGtaReg.exec(gtaString)[1]
+      return unless gtaString.length
+      reg = /[\s"']*([^:,"']+)[\s"']*:[\s"']*([^:,"']+)[\s"']*,?/g
+      gtaOptions = {}
+      while it = reg.exec(gtaString)
+        key = it[1]
+        value = it[2]
+        gtaOptions[key] = value
+      return gtaOptions
   }
 
   return gta

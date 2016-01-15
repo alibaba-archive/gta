@@ -207,8 +207,8 @@
           })
 
         pageview: (data) ->
-          return unless account
-          window._cio?.page(data.page, data.title)
+          # customer.io pageviews are tracking by the javascript snippet above
+          # For Detail: https://customer.io/docs/pageviews.html
 
         event: (gtaOptions) ->
           return unless account
@@ -276,6 +276,12 @@
   providers = []
 
   gta = {
+    page: ''
+
+    setCurrentPage: (page) ->
+      this.page = page
+      return this
+
     setUser: (id, user) ->
       try
         providers = initGta()
@@ -296,11 +302,12 @@
         # new rules
         isObject = typeof gtaOptions is 'object' and !!gtaOptions
         if isObject
+          gtaOptions.page or= this.page
           for provider in providers
             provider.event?(gtaOptions)
         # old rules
         else
-          arguments[0] or= $body?.data('page') or $body?.data('category') or 'gta'
+          arguments[0] or= this.page
           gtaOptions = {
             page: arguments[0]
             action: arguments[1]

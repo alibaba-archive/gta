@@ -32,6 +32,12 @@ Then, include the following script in your HTML and you are ready to go:
 gta.setUser(id, user)
 ```
 
+### Set Current Page
+```
+// Set the current page, default value of the 'page' field while invoking gta.events(gtaOptions)
+gta.setCurrentPage('Home Page')
+```
+
 ### Page View
 
 Call the `pageview` function to record a new page view:
@@ -85,7 +91,11 @@ If `data-label` `data-action` `data-category` is not provided then `className` `
 * [Fullstory](http://help.fullstory.com/using-ref/getting-started)
 
 ## Change Log
-###0.7.0
+#### 0.7.2
+1. remove the needless pageview method of customer.io
+2. add setCurrentPage method
+
+#### 0.7.1
 1. add new rules
 2. remove Piwik
 3. remove field 'value'

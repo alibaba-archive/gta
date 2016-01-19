@@ -1,11 +1,15 @@
 (function() {
+  console.log('test start!');
+
+  window.Gta.debug = true;
+
   window.Gta.test = function () {
     window.Gta.pageview({
       'page': '/my-overridden-page?id=1',
       'title': 'my overridden page'
     });
-    window.Gta.event('button', 'click', 'test:nav buttons', 4);
+    window.Gta.setCurrentPage('Tasks List Page');
+    window.Gta.event({action: 'drag post card', type: 'post', control: 'Post Menu', method: 'drag'});
   }
-  window.Gta.setUser('ahsuhgiuvesnfc', {name: 'User', email:'test@test.com'})
-  $('body').append('<button data-gta="event" data-label="clicked an appended button">click again</button>');
+  window.Gta.setUser('Zuckerberg', {name: 'User', email:'zuckerberg@teambition.com'})
 }())

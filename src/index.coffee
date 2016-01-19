@@ -276,6 +276,8 @@
   providers = []
 
   gta = {
+    debug: false
+
     page: ''
 
     setCurrentPage: (page) ->
@@ -303,16 +305,8 @@
         isObject = typeof gtaOptions is 'object' and !!gtaOptions
         if isObject
           gtaOptions.page or= this.page
-          for provider in providers
-            provider.event?(gtaOptions)
-        # old rules
-        else
-          arguments[0] or= this.page
-          gtaOptions = {
-            page: arguments[0]
-            action: arguments[1]
-            type: arguments[2]
-          }
+          if this.debug
+            console.log('gtaOptions: ', gtaOptions)
           for provider in providers
             provider.event?(gtaOptions)
       catch e
@@ -327,19 +321,8 @@
         # new gta rule
         if newGtaReg.test(gtaString)
           gtaOptions = @parseGta(gtaString)
-        # old gta rule
-        else
-          category = $target.data('category')
-          unless category
-            category = $target.closest('[data-category]').data('category')
-          action = $target.data('action') or e.type
-          label = $target.data('label')
-          gtaOptions = {
-            page: category
-            action: action
-            type: label
-          }
-        @event(gtaOptions)
+          @event(gtaOptions)
+        return this
       )
 
     # 新gta规则：

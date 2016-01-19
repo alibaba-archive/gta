@@ -59,6 +59,12 @@ gta.pageview('/api/hello', '?world');
 1、data-gta属性 类似JSON的 {key: value}格式, 不同的是key和value两端的引号可以省略,
 2、key 和 value 中不可以包含: 冒号、逗号、单引号、双引号.
 
+You can set current page `page`, it will be automatically added to the gtaOptions:
+```
+// It is usually called when the route change
+gta.setCurrentPage('Tasks Page')
+```
+
 You can call the `event` function to track an event:
 ```
 gta.event({action: 'add content', page: 'Project Page', type: 'task', control: 'tasks layout', method: 'double-click'})
@@ -69,18 +75,11 @@ Or, easily add `data-gta='event'` to a DOM element as:
 <button data-gta="{action: 'add content', page: 'Project Page', type: 'task', control: 'tasks layout', method: 'double-click'}">click</button>
 ```
 
-
-#### old rules:
-##### Tips: You can also use the old rules temporarily, but we advise you to use the new rules
-You can call the `event` function to track an event:
+To automatically log gtaOptions, you can open the 'debug' mode:
 ```
-gta.event('button', 'click', 'nav buttons', 4)  //@params: category, action, label
+gta.debug = true
 ```
-Or, easily add `data-gta='event'` to a DOM element as:
-```
-<button data-gta='event' data-label='clicked a button' data-action='click' data-category='button'>click</button>
-```
-If `data-label` `data-action` `data-category` is not provided then `className` `event type` `tagName` will be used instead.
+#### Warning! old rules not supported in v0.8.0
 
 ## API Documentations
 
@@ -90,7 +89,12 @@ If `data-label` `data-action` `data-category` is not provided then `className` `
 * [Customer.io](https://customer.io/docs/api/javascript.html)
 * [Fullstory](http://help.fullstory.com/using-ref/getting-started)
 
+
 ## Change Log
+#### 0.8.0
+1. remove the compatible code for old rules
+2. add 'debug' mode
+
 #### 0.7.2
 1. remove the needless pageview method of customer.io
 2. add setCurrentPage method

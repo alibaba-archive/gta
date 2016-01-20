@@ -198,6 +198,7 @@
         name: 'customer'
         setUser: (id, user) ->
           initCustomer(id)
+          user.id = id
           window._cio?.identify(user)
 
         pageview: (data) ->

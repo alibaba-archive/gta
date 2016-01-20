@@ -11,5 +11,15 @@
     window.Gta.setCurrentPage('Tasks List Page');
     window.Gta.event({action: 'drag post card', type: 'post', control: 'Post Menu', method: 'drag'});
   }
-  window.Gta.setUser('Zuckerberg', {name: 'User', email:'zuckerberg@teambition.com'})
+  window.Gta.setUser('ziqiang250', {
+    name: 'ziqiang',
+    email: 'ziqiang@tb.com',
+    created_at: '20150805',
+    language: 'en',
+    env: 'web',
+    version: '2.5.0',
+    city: 'Xi\'an',
+    country: 'China',
+    region: 'Shanxi',
+  })
 }())

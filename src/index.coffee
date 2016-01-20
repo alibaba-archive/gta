@@ -198,13 +198,7 @@
         name: 'customer'
         setUser: (id, user) ->
           initCustomer(id)
-          window._cio?.identify({
-            id: id,
-            name: user.name,
-            email: user.email,
-            created_at: Math.floor(new Date(user.createdAt).valueOf() / 1000),
-            language: user.language
-          })
+          window._cio?.identify(user)
 
         pageview: (data) ->
           # customer.io pageviews are tracking by the javascript snippet above

@@ -299,6 +299,7 @@
         isObject = typeof gtaOptions is 'object' and !!gtaOptions
         if isObject
           gtaOptions.page or= this.page
+          gtaOptions.method or= 'click'
           if this.debug
             console.log('gtaOptions: ', gtaOptions)
           for provider in providers

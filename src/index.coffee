@@ -1,11 +1,11 @@
 ((root, factory) ->
   'use strict'
 
-  gta = factory()
+  gta = do factory
   if typeof module is 'object' and typeof module.exports is 'object'
     module.exports = gta
   else if typeof define is 'function' and define.amd
-    define(['jquery'], -> gta)
+    define ['jquery'], -> gta
   else
     root.Gta = gta
 
@@ -17,94 +17,89 @@
   newGtaReg = /^\s*\{(.*)\}\s*$/
 
   removeElement = (el) ->
-    el.parentNode.removeChild(el)
+    el.parentNode.removeChild el
 
   checkScript = (script, key) ->
     script.onerror = ->
       window[key] = null
-      removeElement(script)
+      removeElement script
     script.onload = ->
       # do not remove script attriubte if src of script is customer.io
-      removeElement(script) unless script.getAttribute('data-site-id')
+      removeElement script unless script.getAttribute 'data-site-id'
 
   getScript = (src, id) ->
-    script = document.createElement('script')
-    scripts = document.getElementsByTagName('script')[0]
+    script = document.createElement 'script'
+    firstScript = document.getElementsByTagName('script')[0]
     script.async = 1
     script.src = src
     script.id = id if id
-    scripts.parentNode.insertBefore(script, scripts)
+    firstScript.parentNode.insertBefore(script, firstScript)
     return script
 
-  Providers = {
+  Providers =
     google: (account) ->
       return unless account
       window.GoogleAnalyticsObject = '_ga';
       window._ga = ->
-        _ga.q.push(arguments)
+        _ga.q.push arguments
 
       _ga.q = []
-      _ga.l = 1 * new Date()
-      _ga('create', account, 'auto')
-      _ga('require', 'displayfeatures')
-      _ga('require', 'linkid', 'linkid.js')
-      _ga('send', 'pageview')
-      script = getScript('//www.google-analytics.com/analytics.js')
-      checkScript(script, '_ga')
+      _ga.l = 1 * new Date
+      _ga 'create', account, 'auto'
+      _ga 'require', 'displayfeatures'
+      _ga 'require', 'linkid', 'linkid.js'
+      _ga 'send', 'pageview'
+      script = getScript '//www.google-analytics.com/analytics.js'
+      checkScript script, '_ga'
 
       return {
         name: 'google'
         pageview: ->
           return unless window._ga
-          args = slice.call(arguments)
-          data = if typeof args[0] is 'object' then args[0] else args.join('_')
-          window._ga('send', 'pageview', data)
+          args = slice.call arguments
+          data = if typeof args[0] is 'object' then args[0] else args.join '_'
+          window._ga 'send', 'pageview', data
 
         event: (gtaOptions) ->
           return unless window._ga
           category = gtaOptions.page
           action = gtaOptions.action
           label = gtaOptions.type
-          args = ['send', 'event', category, action, label]
-          window._ga.apply(null, args)
+          window._ga 'send', 'event', category, action, label
       }
 
     baidu: (account) ->
       return unless account
       window._hmt = []
-      script = getScript("//hm.baidu.com/hm.js?#{account}")
-      checkScript(script, '_hmt')
+      script = getScript "//hm.baidu.com/hm.js?#{account}"
+      checkScript script, '_hmt'
 
       return {
         name: 'baidu'
         pageview: ->
           return unless window._hmt
-          args = slice.call(arguments)
-          if typeof args[0] == 'object'
+          args = slice.call arguments
+          if typeof args[0] is 'object'
             data = args[0].page
             unless data
-              data = []
-              for key, val of args[0]
-                data.push(val)
-              data = data.join('_')
+              data = (val for key, val of args[0]).join '_'
           else
-            data = args.join('_')
-          window._hmt.push(['_trackPageview', data])
+            data = args.join '_'
+          window._hmt.push ['_trackPageview', data]
 
         event: (gtaOptions) ->
           return unless window._hmt
           category = gtaOptions.page
           action = gtaOptions.action
           label = gtaOptions.type
-          args = ['_trackEvent', category, action, label]
-          window._hmt.push(args)
+          window._hmt.push ['_trackEvent', category, action, label]
       }
 
     mixpanel: (account) ->
       return unless account
-      lib_name = 'mixpanel';
-      window.mixpanel = [];
-      mixpanel._i = [];
+      lib_name = 'mixpanel'
+      mixpanel = window.mixpanel = []
+      mixpanel._i = []
 
       mixpanel.init = (token, config, name) ->
         # support multiple mixpanel instances
@@ -112,7 +107,7 @@
         if name?
           target = mixpanel[name] = []
         else
-          name = lib_name;
+          name = lib_name
 
         # Pass in current people object if it exists
         target.people or= []
@@ -127,13 +122,11 @@
           target.toString(1) + '.people (stub)'
 
         _set_and_defer = (target, fn) ->
-          split = fn.split('.')
+          split = fn.split '.'
           if split.length is 2
             target = target[split[0]]
             fn = split[1]
-
-          target[fn] = ->
-            target.push([fn].concat(slice.call(arguments)))
+          target[fn] = -> target.push [fn].concat slice.call arguments
 
         functions = [
           'disable', 'track', 'track_pageview', 'track_links', 'track_forms', 'register',
@@ -142,25 +135,33 @@
           'people.track_charge', 'people.clear_charges', 'people.delete_user'
         ]
 
-        for fn in functions
-          _set_and_defer(target, fn)
+        _set_and_defer target, fn for fn in functions
 
-        mixpanel._i.push([token, config, name])
+        mixpanel._i.push [token, config, name]
 
       mixpanel.__SV = 1.2
-      mixpanel.init(account)
-      script = getScript('//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js')
-      checkScript(script, lib_name)
+      mixpanel.init account
+      script = getScript '//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js'
+      checkScript script, lib_name
+
+      _gtaUser = null
+      _gtaUserId = null
 
       return {
         name: 'mixpanel'
         pageview: ->
           # Mixpanel does not support pageview
 
+        setUser: (id, user) ->
+          _gtaUserId = id
+          _gtaUser = user
+
         event: (gtaOptions) ->
           data = gtaOptions
           data.platform = 'web'
-          window.mixpanel?.track(data.action, data)
+          data.userKey = _gtaUserId if _gtaUserId?
+          $?.extend data, _gtaUser if _gtaUser?
+          window.mixpanel?.track data.action, data
       }
 
     # customer.io
@@ -176,13 +177,12 @@
         ]
         _cio.factory = (method) ->
           return ->
-            _cio.push([method].concat(Array.prototype.slice.call(arguments, 0)))
+            _cio.push [method].concat Array.prototype.slice.call arguments
             return _cio
 
-        for method in _cio.methods
-          _cio[method] = _cio.factory(method)
+        _cio[method] = _cio.factory method for method in _cio.methods
 
-        accounts = account.split(',')
+        accounts = account.split ','
         # teambition polyfill
         # if use Teambition as userid pick the first one [customer env=2015]
         # use email as userid pick the second one [customer env=2016]
@@ -197,9 +197,13 @@
       return {
         name: 'customer'
         setUser: (id, user) ->
-          initCustomer(id)
           user.id = id
-          window._cio?.identify(user)
+          # teambition polyfill
+          # For user created later than 2016, use email as user id
+          if new Date(user.created_at) >= new Date('2016-01-01')
+            user.id = user.email
+          initCustomer user.id
+          window._cio?.identify user
 
         pageview: (data) ->
           # customer.io pageviews are tracking by the javascript snippet above
@@ -209,7 +213,7 @@
           return unless account
           data = gtaOptions
           data.platform = 'web'
-          window._cio?.track(data.action, data)
+          window._cio?.track data.action, data
       }
 
     fullstory: (account) ->
@@ -217,55 +221,57 @@
 
       _fullstory = window.FS = (id, user) ->
         if _fullstory.q
-          _fullstory.q.push(arguments)
+          _fullstory.q.push arguments
         else
-          _fullstory._api(id, user)
+          _fullstory._api id, user
 
       _fullstory.q = []
       _fs_debug = window._fs_debug = window._fs_debug or false
       _fs_host = window._fs_host = window._fs_host or 'www.fullstory.com'
       _fs_org = window['_fs_org'] = account
 
-      script = getScript("https://#{_fs_host}/s/fs.js")
-      checkScript(script)
+      script = getScript "https://#{_fs_host}/s/fs.js"
+      checkScript script
 
       _fullstory.identify = (id, user) ->
-        _fullstory('user', {uid: id})
-        if user then _fullstory('user', user)
+        _fullstory 'user', uid: id
+        _fullstory 'user', user if user
 
       _fullstory.setUserVars = (user) ->
-        _fullstory('user', user)
+        _fullstory 'user', user
 
       _fullstory.identifyAccount = (id, user = {}) ->
         user.acctId = id
-        _fullstory('account', user)
+        _fullstory 'account', user
 
       return {
         name: 'fullstory'
         setUser: (id, user) ->
-          _fullstory.identify(id, user)
+          clonedUser = $?.extend {}, user
+          delete clonedUser.name    # We don't log sensetive data
+          delete clonedUser.email   # We don't log sensetive data
+          _fullstory.identify id, clonedUser
       }
-  }
 
   initGta = ->
-    element = document.getElementById('gta-main')
+    element = document.getElementById 'gta-main'
     providers = gta.providers = []
 
     return gta unless element
 
     for name, Provider of Providers
-      account = element.getAttribute("data-#{name}")
-      scriptUrl = element.getAttribute("data-#{name}-script")
-      trackUrl = element.getAttribute("data-#{name}-track")
-      randomProportion = element.getAttribute("data-#{name}-random-proportion")
+      account = element.getAttribute "data-#{name}"
+      scriptUrl = element.getAttribute "data-#{name}-script"
+      trackUrl = element.getAttribute "data-#{name}-track"
+      randomProportion = element.getAttribute "data-#{name}-random-proportion"
 
-      continue if randomProportion and Math.random() > randomProportion
+      continue if randomProportion and do Math.random > randomProportion
 
-      if account and provider = Provider(account, scriptUrl, trackUrl)
-        providers.push(provider)
+      if account and provider = Provider account, scriptUrl, trackUrl
+        providers.push provider
 
-    gta.delegateEvents()
-    removeElement(element)
+    do gta.delegateEvents
+    removeElement element
     return providers
 
   providers = []
@@ -279,7 +285,7 @@
         result[key] = value.value or value
     return result
 
-  gta = {
+  gta =
     debug: false
 
     page: ''
@@ -290,17 +296,16 @@
 
     setUser: (id, user) ->
       try
-        providers = initGta()
+        providers = do initGta
         for provider in providers
-          console.log('formatUser', formatUser(provider, user)) if this.debug
-          provider.setUser?.call(provider, id, formatUser(provider, user))
+          console.log 'formatUser', formatUser provider, user if this.debug
+          provider.setUser?.call provider, id, formatUser provider, user
       catch e
       return this
 
     pageview: ->
       try
-        for provider in providers
-          provider.pageview.apply(provider, arguments)
+        provider.pageview.apply provider, arguments for provider in providers
       catch e
       return this
 
@@ -311,25 +316,24 @@
         if isObject
           gtaOptions.page or= this.page
           gtaOptions.method or= 'click'
-          if this.debug
-            console.log('gtaOptions: ', gtaOptions)
-          for provider in providers
-            provider.event?(gtaOptions)
+          console.log 'gtaOptions: ', gtaOptions if this.debug
+          provider.event? gtaOptions for provider in providers
       catch e
       return this
 
     delegateEvents: ->
       return unless window.$
-      $body = $('body')
-      $(document).off('.gta').on('click.gta', '[data-gta]', (e) =>
-        $target = $(e.currentTarget)
-        gtaString = $target.data('gta')
+      $body = $ 'body'
+      $ document
+      .off '.gta'
+      .on 'click.gta', '[data-gta]', (e) =>
+        $target = $ e.currentTarget
+        gtaString = $target.data 'gta'
         # new gta rule
-        if newGtaReg.test(gtaString)
-          gtaOptions = @parseGta(gtaString)
-          @event(gtaOptions)
+        if newGtaReg.test gtaString
+          gtaOptions = @parseGta gtaString
+          @event gtaOptions
         return this
-      )
 
     # 新gta规则：
     # gta两端由 引号、大括号包裹: "{}" 或 '{}'
@@ -341,13 +345,11 @@
       return unless gtaString.length
       reg = /[\s"']*([^:,"']+)[\s"']*:[\s"']*([^:,"']+)[\s"']*,?/g
       gtaOptions = {}
-      while it = reg.exec(gtaString)
+      while it = reg.exec gtaString
         key = it[1]
         value = it[2]
         gtaOptions[key] = value
       return gtaOptions
-  }
 
   return gta
-
 )

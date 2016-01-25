@@ -270,6 +270,15 @@
 
   providers = []
 
+  formatUser = (provider, user)->
+    result = {}
+    for key, value of user
+      if value.alias?[provider.name]
+        result[value.alias[provider.name]] = value.value
+      else
+        result[key] = value.value or value
+    return result
+
   gta = {
     debug: false
 
@@ -283,7 +292,8 @@
       try
         providers = initGta()
         for provider in providers
-          provider.setUser?.call(provider, id, user)
+          console.log('formatUser', formatUser(provider, user)) if this.debug
+          provider.setUser?.call(provider, id, formatUser(provider, user))
       catch e
       return this
 

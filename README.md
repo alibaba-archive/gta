@@ -53,11 +53,10 @@ gta.pageview('/api/hello', '?world');
 ```
 
 ### Events
+#### Tips: 'page' equals to 'category' in old rules, 'type' equals to 'label' in old rules.
 
-#### new rules:
-##### Tips: 'page' is equal to 'category', 'type' is equal to 'label'.
-1、data-gta属性 类似JSON的 {key: value}格式, 不同的是key和value两端的引号可以省略,
-2、key 和 value 中不可以包含: 冒号、逗号、单引号、双引号.
+1. `data-gta` property in DOM element use similar key-value format (`{"key": "value"}`) like JSON, and quota could be omitted.
+2.  Colon, comma and quota cannot be used in `key` and `value`.
 
 You can set current page `page`, it will be automatically added to the gtaOptions:
 ```
@@ -91,6 +90,9 @@ gta.debug = true
 
 
 ## Change Log
+#### 0.8.1
+1. Add provider-specific alias support in method `setUser`
+
 #### 0.8.0
 1. remove the compatible code for old rules
 2. add 'debug' mode

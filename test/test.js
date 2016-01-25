@@ -14,7 +14,12 @@
   window.Gta.setUser('ziqiang250', {
     name: 'ziqiang',
     email: 'ziqiang@tb.com',
-    created_at: '20150805',
+    created_at: {
+      value: '20150805',
+      alias: {
+        fullstory: 'created_at_date'
+      }
+    },
     language: 'en',
     env: 'web',
     version: '2.5.0',

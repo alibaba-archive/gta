@@ -90,6 +90,11 @@ gta.debug = true
 
 
 ## Change Log
+#### 0.8.2
+1. Mixin user info into mixpanel data
+2. Teambition polyfill for customer.io
+3. Remove sensetive data from fullstory
+
 #### 0.8.1
 1. Add provider-specific alias support in method `setUser`
 

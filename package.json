@@ -1,6 +1,6 @@
 {
   "name": "teambition-gta",
-  "version": "0.8.0",
+  "version": "0.8.2",
   "description": "group teambition analysis tool",
   "main": "lib/index.js",
   "scripts": {},

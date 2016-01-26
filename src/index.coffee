@@ -282,7 +282,7 @@
       if value.alias?[provider.name]
         result[value.alias[provider.name]] = value.value
       else
-        result[key] = value.value or value
+        result[key] = if value.value? then value.value else value
     return result
 
   gta =

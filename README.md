@@ -90,6 +90,9 @@ gta.debug = true
 
 
 ## Change Log
+#### 0.8.3
+Minor bug fix
+
 #### 0.8.2
 1. Mixin user info into mixpanel data
 2. Teambition polyfill for customer.io

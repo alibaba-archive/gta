@@ -248,8 +248,8 @@
         name: 'fullstory'
         setUser: (id, user) ->
           clonedUser = $?.extend {}, user
-          delete clonedUser.name    # We don't log sensetive data
-          delete clonedUser.email   # We don't log sensetive data
+          delete clonedUser.name                          # We don't log sensetive data
+          clonedUser.email = "#{id}@mail.teambition.com"  # We don't log sensetive data
           _fullstory.identify id, clonedUser
       }
 

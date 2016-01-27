@@ -90,7 +90,10 @@ gta.debug = true
 
 
 ## Change Log
-#### 0.8.3
+#### 0.8.5
+1. Fullstory will ignore unqualified field
+
+#### 0.8.3 - 0.8.4
 Minor bug fix
 
 #### 0.8.2

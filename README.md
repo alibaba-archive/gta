@@ -90,6 +90,9 @@ gta.debug = true
 
 
 ## Change Log
+#### 0.8.6
+1. Force 'created_at' field for Customer.io be a number
+
 #### 0.8.5
 1. Fullstory will ignore unqualified field
 

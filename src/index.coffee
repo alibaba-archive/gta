@@ -202,6 +202,7 @@
           # For user created later than 2016, use email as user id
           if new Date(user.created_at) >= new Date('2016-01-01')
             user.id = user.email
+          user.created_at = new Date(user.created_at).valueOf()
           initCustomer user.id
           window._cio?.identify user
 

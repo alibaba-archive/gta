@@ -90,7 +90,7 @@ gta.debug = true
 
 
 ## Change Log
-#### 0.8.6 - 0.8.7
+#### 0.8.6 - 0.8.8
 1. Force 'created_at' field for Customer.io be a number in seconds since epoch
 
 #### 0.8.5

@@ -90,8 +90,13 @@ gta.debug = true
 
 
 ## Change Log
+
+#### 0.8.9
+1. Add whitelist `wlist` support in `setUser`.
+2. Teambition polyfill for desktop client in mixpanel
+
 #### 0.8.6 - 0.8.8
-1. Force 'created_at' field for Customer.io be a number in seconds since epoch
+1. Force `created_at` field for Customer.io be a number in seconds since epoch
 
 #### 0.8.5
 1. Fullstory will ignore unqualified field

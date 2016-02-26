@@ -155,6 +155,12 @@
         setUser: (id, user) ->
           _gtaUserId = id
           _gtaUser = user
+          # Teambition polyfill for desktop clients
+          dc = navigator.userAgent.match(/Teambition\/([\d\.]+)/i)
+          if dc
+            mixpanel.register
+              $browser: 'Teambition_Desktop',
+              $browser_version: dc[1]
 
         event: (gtaOptions) ->
           data = gtaOptions
@@ -282,6 +288,7 @@
   formatUser = (provider, user)->
     result = {}
     for key, value of user
+      continue if value.wlist? and provider.name not in value.wlist
       if value.alias?[provider.name]
         result[value.alias[provider.name]] = value.value
       else
@@ -301,7 +308,7 @@
       try
         providers = do initGta
         for provider in providers
-          console.log 'formatUser', formatUser provider, user if this.debug
+          console.log 'formatUser', provider.name, formatUser provider, user if @debug
           provider.setUser?.call provider, id, formatUser provider, user
       catch e
       return this

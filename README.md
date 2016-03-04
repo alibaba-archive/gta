@@ -91,6 +91,9 @@ gta.debug = true
 
 ## Change Log
 
+#### 0.8.10
+1. Fix push config object when value is the falsely value
+
 #### 0.8.9
 1. Add whitelist `wlist` support in `setUser`.
 2. Teambition polyfill for desktop client in mixpanel

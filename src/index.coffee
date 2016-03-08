@@ -292,7 +292,7 @@
       if value.alias?[provider.name]
         result[value.alias[provider.name]] = value.value
       else
-        result[key] = if 'value' of value then value.value else value
+        result[key] = if Object::toString.call(value) is '[object Object]' and 'value' of value then value.value else value
     return result
 
   gta =
@@ -311,6 +311,7 @@
           console.log 'formatUser', provider.name, formatUser provider, user if @debug
           provider.setUser?.call provider, id, formatUser provider, user
       catch e
+        console.error e if @debug
       return this
 
     pageview: ->
@@ -326,9 +327,10 @@
         if isObject
           gtaOptions.page or= this.page
           gtaOptions.method or= 'click'
-          console.log 'gtaOptions: ', gtaOptions if this.debug
+          console.log 'gtaOptions: ', gtaOptions if @debug
           provider.event? gtaOptions for provider in providers
       catch e
+        console.error e if @debug
       return this
 
     delegateEvents: ->

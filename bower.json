@@ -1,6 +1,6 @@
 {
   "name": "gta",
-  "version": "0.8.10",
+  "version": "0.8.11",
   "main": "lib/index.js",
   "ignore": [
     "**/.*",

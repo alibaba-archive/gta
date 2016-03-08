@@ -91,7 +91,7 @@ gta.debug = true
 
 ## Change Log
 
-#### 0.8.10
+#### 0.8.10 - 0.8.11
 1. Fix push config object when value is the falsely value
 
 #### 0.8.9

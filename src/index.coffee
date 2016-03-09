@@ -257,7 +257,7 @@
           clonedUser = $?.extend {}, user
           for k, v of clonedUser when not /(^(displayName|email)$)|(.*_(str|int|real|date|bool)$)/.test k
             delete clonedUser[k]
-          clonedUser.name = id                            # We don't log sensetive data
+          clonedUser.displayName = id                     # We don't log sensetive data
           clonedUser.email = "#{id}@mail.teambition.com"  # We don't log sensetive data
           _fullstory.identify id, clonedUser
       }

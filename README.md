@@ -91,6 +91,9 @@ gta.debug = true
 
 ## Change Log
 
+#### 0.8.12
+1. For fullstory: Change `name` to `displayName`
+
 #### 0.8.10 - 0.8.11
 1. Fix push config object when value is the falsely value
 

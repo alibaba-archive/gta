@@ -91,6 +91,9 @@ gta.debug = true
 
 ## Change Log
 
+#### 0.8.13
+1. Report system version, desktop client type&version to mixpanel
+
 #### 0.8.12
 1. For fullstory: Change `name` to `displayName`
 

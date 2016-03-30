@@ -156,11 +156,15 @@
           _gtaUserId = id
           _gtaUser = user
           # Teambition polyfill for desktop clients
-          dc = navigator.userAgent.match(/Teambition\/([\d\.]+)/i)
+          dc = navigator.userAgent.match /(Teambition(?:-UWP)?)\/([\d\.]+)/i
           if dc
+            [ all, client, version ] = dc
+            client = 'Teambition_Desktop' if client is 'Teambition'
             mixpanel.register
-              $browser: 'Teambition_Desktop',
-              $browser_version: dc[1]
+              $browser: client,
+              $browser_version: version
+          os = navigator.userAgent.match /Windows NT [\d.]+|(?:Macintosh;|Linux|\b\w*BSD)[^;)]*?(?=\)|;)/i
+          mixpanel.register $os_version: os[0] if os
 
         event: (gtaOptions) ->
           data = gtaOptions

@@ -266,6 +266,20 @@
           _fullstory.identify id, clonedUser
       }
 
+  utm_daemon = ->
+    try
+      re = /utm_(\w+)=([^&]*)&?/ig
+      utm = {}
+      while match = re.exec window.location.search
+        [ part, key, value ] = match
+        utm[key] = value
+      domain = ".#{/\.?([\w-]+\.\w+)$/.exec(window.location.hostname)[1]}"
+      monthLater = new Date do Date.now + 2592000000   # 1000 * 60 * 60 * 24 * 30
+      document.cookie = "utm=#{encodeURI JSON.stringify utm};expires=#{do monthLater.toGMTString};domain=#{domain}" if part
+    catch e
+      console.error e if @debug
+    return this
+
   initGta = ->
     element = document.getElementById 'gta-main'
     providers = gta.providers = []
@@ -285,6 +299,7 @@
 
     do gta.delegateEvents
     removeElement element
+    do utm_daemon
     return providers
 
   providers = []

@@ -91,6 +91,9 @@ gta.debug = true
 
 ## Change Log
 
+#### 0.9.0
+1. utm daemon support
+
 #### 0.8.13
 1. Report system version, desktop client type&version to mixpanel
 

@@ -277,7 +277,7 @@
       monthLater = new Date do Date.now + 2592000000   # 1000 * 60 * 60 * 24 * 30
       document.cookie = "utm=#{encodeURI JSON.stringify utm};expires=#{do monthLater.toGMTString};domain=#{domain}" if part
     catch e
-      console.error e if @debug
+      console.error e if gta.debug
     return this
 
   initGta = ->

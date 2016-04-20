@@ -168,7 +168,7 @@
 
         event: (gtaOptions) ->
           data = gtaOptions
-          data.platform = 'web'
+          data.platform ?= 'web'
           data.userKey = _gtaUserId if _gtaUserId?
           $?.extend data, _gtaUser if _gtaUser?
           window.tbpanel?.track data.action, data
@@ -247,7 +247,7 @@
 
         event: (gtaOptions) ->
           data = gtaOptions
-          data.platform = 'web'
+          data.platform ?= 'web'
           data.userKey = _gtaUserId if _gtaUserId?
           $?.extend data, _gtaUser if _gtaUser?
           window.mixpanel?.track data.action, data
@@ -302,7 +302,7 @@
         event: (gtaOptions) ->
           return unless account
           data = gtaOptions
-          data.platform = 'web'
+          data.platform ?= 'web'
           window._cio?.track data.action, data
       }
 

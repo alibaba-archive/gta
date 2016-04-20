@@ -91,6 +91,11 @@ gta.debug = true
 
 ## Change Log
 
+#### 0.9.1 - 0.9.2
+1. New provider: tbpanel
+2. Make property 'platform' changable
+3. Minor bug fix
+
 #### 0.9.0
 1. utm daemon support
 

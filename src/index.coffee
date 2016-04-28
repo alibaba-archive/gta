@@ -386,6 +386,7 @@
   formatUser = (provider, user)->
     result = {}
     for key, value of user
+      continue unless value
       continue if value.wlist? and provider.name not in value.wlist
       if value.alias?[provider.name]
         result[value.alias[provider.name]] = value.value

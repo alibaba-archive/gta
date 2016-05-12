@@ -167,7 +167,7 @@
           tbpanel.register $os_version: os[0] if os
 
         event: (gtaOptions) ->
-          data = gtaOptions
+          data = if window.$ then $.extend({}, gtaOptions) else gtaOptions
           data.platform ?= 'web'
           data.userKey = _gtaUserId if _gtaUserId?
           $?.extend data, _gtaUser if _gtaUser?
@@ -246,7 +246,7 @@
           mixpanel.register $os_version: os[0] if os
 
         event: (gtaOptions) ->
-          data = gtaOptions
+          data = if window.$ then $.extend({}, gtaOptions) else gtaOptions
           data.platform ?= 'web'
           data.userKey = _gtaUserId if _gtaUserId?
           $?.extend data, _gtaUser if _gtaUser?

@@ -5,7 +5,7 @@
   if typeof module is 'object' and typeof module.exports is 'object'
     module.exports = gta
   else if typeof define is 'function' and define.amd
-    define ['jquery'], -> gta
+    define -> gta
   else
     root.Gta = gta
 
@@ -35,6 +35,12 @@
     script.id = id if id
     firstScript.parentNode.insertBefore(script, firstScript)
     return script
+
+  extend = (dest, source...)->
+    for arg in source
+      for key, value of arg
+        dest[key] = value
+    return dest
 
   Providers =
     google: (account) ->
@@ -167,10 +173,10 @@
           tbpanel.register $os_version: os[0] if os
 
         event: (gtaOptions) ->
-          data = if window.$ then $.extend({}, gtaOptions) else gtaOptions
+          data = extend {}, gtaOptions
           data.platform ?= 'web'
           data.userKey = _gtaUserId if _gtaUserId?
-          $?.extend data, _gtaUser if _gtaUser?
+          extend data, _gtaUser if _gtaUser?
           window.tbpanel?.track data.action, data
       }
 
@@ -246,10 +252,10 @@
           mixpanel.register $os_version: os[0] if os
 
         event: (gtaOptions) ->
-          data = if window.$ then $.extend({}, gtaOptions) else gtaOptions
+          data = extend {}, gtaOptions
           data.platform ?= 'web'
           data.userKey = _gtaUserId if _gtaUserId?
-          $?.extend data, _gtaUser if _gtaUser?
+          extend data, _gtaUser if _gtaUser?
           window.mixpanel?.track data.action, data
       }
 
@@ -337,7 +343,7 @@
       return {
         name: 'fullstory'
         setUser: (id, user) ->
-          clonedUser = $?.extend {}, user
+          clonedUser = extend {}, user
           for k, v of clonedUser when not /(^(displayName|email)$)|(.*_(str|int|real|date|bool)$)/.test k
             delete clonedUser[k]
           clonedUser.displayName = id                     # We don't log sensetive data

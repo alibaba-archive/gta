@@ -91,6 +91,10 @@ gta.debug = true
 
 ## Change Log
 
+#### 0.9.3
+1. Remove jQuery dependency
+2. Minor bug fix
+
 #### 0.9.1 - 0.9.2
 1. New provider: tbpanel
 2. Make property 'platform' changable

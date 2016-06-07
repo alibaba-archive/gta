@@ -91,6 +91,9 @@ gta.debug = true
 
 ## Change Log
 
+#### 0.9.4
+1. Fix cookie path in utm daemon
+
 #### 0.9.3
 1. Remove jQuery dependency
 2. Minor bug fix

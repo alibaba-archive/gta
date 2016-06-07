@@ -360,7 +360,7 @@
         utm[key] = value
       domain = ".#{/\.?([\w-]+\.\w+)$/.exec(window.location.hostname)[1]}"
       monthLater = new Date do Date.now + 2592000000   # 1000 * 60 * 60 * 24 * 30
-      document.cookie = "utm=#{encodeURI JSON.stringify utm};expires=#{do monthLater.toGMTString};domain=#{domain}" if part
+      document.cookie = "utm=#{encodeURI JSON.stringify utm};expires=#{do monthLater.toGMTString};domain=#{domain};path=/" if part
     catch e
       console.error e if gta.debug
     return this

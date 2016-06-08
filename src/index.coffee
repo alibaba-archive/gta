@@ -439,18 +439,13 @@
       return this
 
     delegateEvents: ->
-      return unless window.$
-      $body = $ 'body'
-      $ document
-      .off '.gta'
-      .on 'click.gta', '[data-gta]', (e) =>
-        $target = $ e.currentTarget
-        gtaString = $target.data 'gta'
-        # new gta rule
+      listener = (e) =>
+        gtaString = e?.target?.dataset?.gta
         if newGtaReg.test gtaString
           gtaOptions = @parseGta gtaString
           @event gtaOptions
-        return this
+      document.body.removeEventListener 'click', listener, true
+      document.body.addEventListener 'click', listener, true
 
     # 新gta规则：
     # gta两端由 引号、大括号包裹: "{}" 或 '{}'

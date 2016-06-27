@@ -147,7 +147,7 @@
 
       tbpanel.__SV = 1.2
       tbpanel.init account
-      script = getScript '//dn-st.teambition.net/tbpanel/tbpanel.fc57.js'
+      script = getScript '//dn-st.teambition.net/tbpanel/tbpanel.d812.js'
       checkScript script, lib_name
 
       _gtaUser = null
@@ -440,10 +440,11 @@
 
     delegateEvents: ->
       listener = (e) =>
-        gtaString = e?.target?.dataset?.gta
-        if newGtaReg.test gtaString
-          gtaOptions = @parseGta gtaString
-          @event gtaOptions
+        el = e.target
+        while el
+          gtaString = el.dataset?.gta
+          @event @parseGta gtaString if newGtaReg.test gtaString
+          el = el.parentElement
       document.body.removeEventListener 'click', listener, true
       document.body.addEventListener 'click', listener, true
 

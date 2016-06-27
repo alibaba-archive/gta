@@ -90,6 +90,10 @@ gta.debug = true
 
 
 ## Change Log
+#### 0.9.6
+1. Update tbpanel script
+2. Fix bug on `delegateEvents`
+
 #### 0.9.5
 1. Remove another jQuery dependency
 

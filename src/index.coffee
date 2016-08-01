@@ -439,11 +439,17 @@
       return this
 
     delegateEvents: ->
+      matches = (el, selector) ->
+        (el.matches || el.matchesSelector ||
+         el.msMatchesSelector || el.mozMatchesSelector ||
+         el.webkitMatchesSelector || el.oMatchesSelector).call(el, selector)
       listener = (e) =>
         el = e.target
         while el
           gtaString = el.dataset?.gta
-          @event @parseGta gtaString if newGtaReg.test gtaString
+          gtaIgnore = el.dataset?.gtaIgnore
+          if newGtaReg.test(gtaString) and (not gtaIgnore or matches e.target, gtaIgnore)
+            @event @parseGta gtaString
           el = el.parentElement
       document.body.removeEventListener 'click', listener, true
       document.body.addEventListener 'click', listener, true

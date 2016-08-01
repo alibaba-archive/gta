@@ -90,6 +90,9 @@ gta.debug = true
 
 
 ## Change Log
+#### 0.9.7
+1. Add `data-gta-ignore` support
+
 #### 0.9.6
 1. Update tbpanel script
 2. Fix bug on `delegateEvents`

@@ -351,6 +351,16 @@
           _fullstory.identify id, clonedUser
       }
 
+    growingio: (account) ->
+      return unless account
+      _vds = _vds or []
+      window._vds = _vds
+      _vds.push ['setAccountId', account]
+      script = getScript (if 'https:' is document.location.protocol then 'https://' else 'http://') + 'dn-growing.qbox.me/vds.js'
+      checkScript script
+
+      return name: 'growingio'
+
   utm_daemon = ->
     try
       re = /utm_(\w+)=([^&]*)&?/ig

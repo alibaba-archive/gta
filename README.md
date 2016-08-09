@@ -87,9 +87,12 @@ gta.debug = true
 * [Mixpanel](https://mixpanel.com/help/reference/javascript)
 * [Customer.io](https://customer.io/docs/api/javascript.html)
 * [Fullstory](http://help.fullstory.com/using-ref/getting-started)
-
+* [GrowingIO](https://help.growingio.com/Developer%20Document.html)
 
 ## Change Log
+#### 0.9.8
+1. New provider: GrowingIO
+
 #### 0.9.7
 1. Add `data-gta-ignore` support
 

@@ -32,6 +32,19 @@ Then, include the following script in your HTML and you are ready to go:
 gta.setUser(id, user)
 ```
 
+### Register Property
+```
+gta.registerProperty(key, value)
+gta.unregisterProperty(key)
+```
+All registered properties would be mixed with every events util unregister.
+
+### Register Plugin
+```
+gta.registerPlugin(Plugin)
+```
+A plugin cloudn't be unregistered now.
+
 ### Set Current Page
 ```
 // Set the current page, default value of the 'page' field while invoking gta.events(gtaOptions)
@@ -74,11 +87,13 @@ Or, easily add `data-gta='event'` to a DOM element as:
 <button data-gta="{action: 'add content', page: 'Project Page', type: 'task', control: 'tasks layout', method: 'double-click'}">click</button>
 ```
 
-To automatically log gtaOptions, you can open the 'debug' mode:
+To automatically log gtaOptions, you can use the 'debug' mode:
 ```
 gta.debug = true
+or
+window._gta_debug = true
 ```
-#### Warning! old rules not supported in v0.8.0
+#### Warning! old rules not supported since v0.8.0
 
 ## API Documentations
 
@@ -90,73 +105,6 @@ gta.debug = true
 * [GrowingIO](https://help.growingio.com/Developer%20Document.html)
 
 ## Change Log
-#### 0.9.8
-1. New provider: GrowingIO
-
-#### 0.9.7
-1. Add `data-gta-ignore` support
-
-#### 0.9.6
-1. Update tbpanel script
-2. Fix bug on `delegateEvents`
-
-#### 0.9.5
-1. Remove another jQuery dependency
-
-#### 0.9.4
-1. Fix cookie path in utm daemon
-
-#### 0.9.3
-1. Remove jQuery dependency
-2. Minor bug fix
-
-#### 0.9.1 - 0.9.2
-1. New provider: tbpanel
-2. Make property 'platform' changable
-3. Minor bug fix
-
-#### 0.9.0
-1. utm daemon support
-
-#### 0.8.13
-1. Report system version, desktop client type&version to mixpanel
-
-#### 0.8.12
-1. For fullstory: Change `name` to `displayName`
-
-#### 0.8.10 - 0.8.11
-1. Fix push config object when value is the falsely value
-
-#### 0.8.9
-1. Add whitelist `wlist` support in `setUser`.
-2. Teambition polyfill for desktop client in mixpanel
-
-#### 0.8.6 - 0.8.8
-1. Force `created_at` field for Customer.io be a number in seconds since epoch
-
-#### 0.8.5
-1. Fullstory will ignore unqualified field
-
-#### 0.8.3 - 0.8.4
-Minor bug fix
-
-#### 0.8.2
-1. Mixin user info into mixpanel data
-2. Teambition polyfill for customer.io
-3. Remove sensetive data from fullstory
-
-#### 0.8.1
-1. Add provider-specific alias support in method `setUser`
-
-#### 0.8.0
-1. remove the compatible code for old rules
-2. add 'debug' mode
-
-#### 0.7.2
-1. remove the needless pageview method of customer.io
-2. add setCurrentPage method
-
-#### 0.7.1
-1. add new rules
-2. remove Piwik
-3. remove field 'value'
+#### 1.0.0
+1. New architecture
+2. New APIs: `(un)register(Property|Plugin)`

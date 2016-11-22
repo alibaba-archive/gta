@@ -1,6 +1,6 @@
 Common    = require 'common'
-Plugins   = require 'plugins/__init__'
-Providers = require 'providers/__init__'
+Plugins   = require 'plugins'
+Providers = require 'providers'
 
 class GTA
   debug: no
@@ -69,9 +69,13 @@ class GTA
         for plugin in @plugins
           gtaOptions = plugin.onGTAEvent?(gtaOptions)
         console.log 'GTA options: ', gtaOptions if @debug or window._gta_debug
-        provider.event? gtaOptions for provider in @providers
+        for provider in @providers
+          try
+            provider.event? gtaOptions
+          catch ee
+            console.trace "error on gta provider: #{provider.name}, #{ee}" if @debug or window._gta_debug
     catch e
-      console.error e if @debug or window._gta_debug
+      console.trace "error on gta event: #{e}" if @debug or window._gta_debug
     return this
 
   delegateEvents: ->

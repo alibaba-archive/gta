@@ -26,7 +26,7 @@ class Baidu extends BaseProvider
 
   event: (gtaOptions) ->
     return unless window._hmt
-    category = gtaOptions.page
-    action = gtaOptions.action
-    label = gtaOptions.type
+    category = gtaOptions.page or ''
+    action = gtaOptions.action or ''
+    label = gtaOptions.type or ''
     window._hmt.push ['_trackEvent', category, action, label]

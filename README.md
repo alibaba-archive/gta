@@ -105,6 +105,12 @@ window._gta_debug = true
 * [GrowingIO](https://help.growingio.com/Developer%20Document.html)
 
 ## Change Log
+#### 1.0.2
+1. Now library can be exported to `window.Gta`
+
+#### 1.0.1
+1. Fix GTA crash when provider Baidu crash.
+
 #### 1.0.0
 1. New architecture
 2. New APIs: `(un)register(Property|Plugin)`

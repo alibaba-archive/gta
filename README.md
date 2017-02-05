@@ -16,7 +16,7 @@ npm i --save teambition-gta
 
 Then, include the following script in your HTML and you are ready to go:
 
-```
+```html
 <script id="gta-main"
   src="bower_component/gta/lib/index.js"
   data-baidu="ec912ecc405ccd050e4cdf452ef4xxxx"
@@ -27,26 +27,26 @@ Then, include the following script in your HTML and you are ready to go:
 ```
 
 ### Set User ID
-```
+```js
 // Currently only Customer.io and Fullstory support userId
 gta.setUser(id, user)
 ```
 
 ### Register Property
-```
+```js
 gta.registerProperty(key, value)
 gta.unregisterProperty(key)
 ```
 All registered properties would be mixed with every events util unregister.
 
 ### Register Plugin
-```
+```js
 gta.registerPlugin(Plugin)
 ```
 A plugin cloudn't be unregistered now.
 
 ### Set Current Page
-```
+```js
 // Set the current page, default value of the 'page' field while invoking gta.events(gtaOptions)
 gta.setCurrentPage('Home Page')
 ```
@@ -54,7 +54,7 @@ gta.setCurrentPage('Home Page')
 ### Page View
 
 Call the `pageview` function to record a new page view:
-```
+```js
 // Use single object
 gta.pageview({
     'page': '/my-overridden-page?id=1',
@@ -72,23 +72,23 @@ gta.pageview('/api/hello', '?world');
 2.  Colon, comma and quota cannot be used in `key` and `value`.
 
 You can set current page `page`, it will be automatically added to the gtaOptions:
-```
+```js
 // It is usually called when the route change
 gta.setCurrentPage('Tasks Page')
 ```
 
 You can call the `event` function to track an event:
-```
+```js
 gta.event({action: 'add content', page: 'Project Page', type: 'task', control: 'tasks layout', method: 'double-click'})
 ```
 
 Or, easily add `data-gta='event'` to a DOM element as:
-```
+```html
 <button data-gta="{action: 'add content', page: 'Project Page', type: 'task', control: 'tasks layout', method: 'double-click'}">click</button>
 ```
 
 To automatically log gtaOptions, you can use the 'debug' mode:
-```
+```js
 gta.debug = true
 or
 window._gta_debug = true

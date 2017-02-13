@@ -15,18 +15,10 @@ class GTA
     return unless $el
 
     for name, Provider of Providers
-      account = $el.getAttribute "data-#{name}"
-      scriptUrl = $el.getAttribute "data-#{name}-script"
-      trackUrl = $el.getAttribute "data-#{name}-track"
-      randomProportion = $el.getAttribute "data-#{name}-random-proportion"
-
-      continue if randomProportion and do Math.random > randomProportion
-
-      if account
-        @providers.push new Provider account, scriptUrl, trackUrl
+      @registerProvider name, Provider, $el
 
     for name, Plugin of Plugins
-      @plugins.push new Plugin this
+      @registerPlugin Plugin
 
     @delegateEvents()
     Common.removeElement $el
@@ -38,6 +30,22 @@ class GTA
   unregisterProperty: (key) ->
     delete @mixPayload[key]
     return this
+
+  registerProvider: (name, Provider, $el = document.getElementById('gta-main')) ->
+    return false if not $el
+
+    account = $el.getAttribute "data-#{name}"
+    scriptUrl = $el.getAttribute "data-#{name}-script"
+    trackUrl = $el.getAttribute "data-#{name}-track"
+    randomProportion = $el.getAttribute "data-#{name}-random-proportion"
+
+    return true if randomProportion and do Math.random > randomProportion
+
+    if account
+      @providers.push new Provider account, scriptUrl, trackUrl
+      return true
+
+    return false
 
   registerPlugin: (Plugin) ->
     @plugins.push new Plugin this

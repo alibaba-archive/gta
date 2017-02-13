@@ -11,7 +11,7 @@ bower install gta
 or with NPM:
 
 ```bash
-npm i --save teambition-gta
+npm install --save teambition/gta
 ```
 
 Then, include the following script in your HTML and you are ready to go:
@@ -38,6 +38,13 @@ gta.registerProperty(key, value)
 gta.unregisterProperty(key)
 ```
 All registered properties would be mixed with every events util unregister.
+
+### Register Provider
+```js
+gta.registerProvider(name, Provider, $el)
+```
+Register third party provider. `$el` points to element stores gta config,
+it could be omitted when config stores in `<script id='gta-main'>`.
 
 ### Register Plugin
 ```js

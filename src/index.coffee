@@ -8,7 +8,7 @@ class GTA
   providers: []
   mixPayload: {}
 
-  version: '1.0.2'
+  version: '1.0.3'
 
   constructor: ->
     $el = document.getElementById 'gta-main'

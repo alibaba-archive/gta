@@ -112,6 +112,9 @@ window._gta_debug = true
 * [GrowingIO](https://help.growingio.com/Developer%20Document.html)
 
 ## Change Log
+#### 1.0.3
+1. New API: `registerProvider`
+
 #### 1.0.2
 1. Now library can be exported to `window.Gta`
 

@@ -5,8 +5,10 @@ module.exports =
 class TBPanel extends BaseProvider
   name: 'tbpanel'
 
-  constructor: (account) ->
+  constructor: (account, scriptUrl) ->
     return unless account
+    scriptUrl or= '//dn-st.teambition.net/tbpanel/tbpanel.d812.js'
+
     lib_name = 'tbpanel'
     tbpanel = window.tbpanel = []
     tbpanel._i = []
@@ -51,7 +53,7 @@ class TBPanel extends BaseProvider
 
     tbpanel.__SV = 1.2
     tbpanel.init account
-    script = BaseProvider.createScript '//dn-st.teambition.net/tbpanel/tbpanel.d812.js'
+    script = BaseProvider.createScript scriptUrl
     BaseProvider.loadScript script, lib_name
 
   setUser: (id, raw_user) ->

@@ -112,6 +112,9 @@ window._gta_debug = true
 * [GrowingIO](https://help.growingio.com/Developer%20Document.html)
 
 ## Change Log
+#### 1.0.4
+1. TBPanel now accepts optional `scriptUrl`
+
 #### 1.0.3
 1. New API: `registerProvider`
 

@@ -50,7 +50,7 @@ it could be omitted when config stores in `<script id='gta-main'>`.
 ```js
 gta.registerPlugin(Plugin)
 ```
-A plugin cloudn't be unregistered now.
+A plugin cloudn't be unregistered now, returns plugin instance.
 
 ### Set Current Page
 ```js
@@ -112,6 +112,9 @@ window._gta_debug = true
 * [GrowingIO](https://help.growingio.com/Developer%20Document.html)
 
 ## Change Log
+#### 1.0.5
+1. `gta.registerPlugin` now returns plugin's instance
+
 #### 1.0.4
 1. TBPanel now accepts optional `scriptUrl`
 

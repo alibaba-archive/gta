@@ -14,10 +14,10 @@ class GTA
     $el = document.getElementById 'gta-main'
     return unless $el
 
-    for name, Provider of Providers
+    for own name, Provider of Providers
       @registerProvider name, Provider, $el
 
-    for name, Plugin of Plugins
+    for own name, Plugin of Plugins
       @registerPlugin Plugin
 
     @delegateEvents()
@@ -48,7 +48,9 @@ class GTA
     return false
 
   registerPlugin: (Plugin) ->
-    @plugins.push new Plugin this
+    plugin = new Plugin this
+    @plugins.push plugin
+    return plugin
 
   setCurrentPage: (page) ->
     @registerProperty('page', page)

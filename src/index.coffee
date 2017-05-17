@@ -8,7 +8,7 @@ class GTA
   providers: []
   mixPayload: {}
 
-  version: '1.0.7'
+  version: '1.0.8'
 
   constructor: ->
     $el = document.getElementById 'gta-main'
@@ -80,6 +80,9 @@ class GTA
         gtaOptions = Common.extend {}, @mixPayload, gtaOptions
         for plugin in @plugins
           gtaOptions = plugin.onGTAEvent?(gtaOptions)
+          unless gtaOptions
+            console.log 'An event was filtered by plugin:', plugin.name if @debug or window._gta_debug
+            return this
         console.log 'GTA options: ', gtaOptions if @debug or window._gta_debug
         for provider in @providers
           try

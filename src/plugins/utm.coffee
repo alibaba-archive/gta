@@ -1,12 +1,14 @@
 BasePlugin = require './base'
 
 UTM_TAG_REGEX = /utm_(\w+)=([^&]*)&?/ig
+COOKIE_TEST_REGEX = /(^|;\s?)utm=(\S+);/i
 
 module.exports = class UTMDaemon extends BasePlugin
   name: 'utm daemon'
 
   constructor: (gta)->
     try
+      return if COOKIE_TEST_REGEX.test(document.cookie)
       utm = {}
       while match = UTM_TAG_REGEX.exec window.location.search
         [ part, key, value ] = match

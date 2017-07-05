@@ -1,11 +1,13 @@
 BasePlugin = require './base'
 
+COOKIE_TEST_REGEX = /(^|;\s?)referral=(\S+);/i
+
 module.exports = class ReferralDaemon extends BasePlugin
   name: 'referral daemon'
 
   constructor: (gta)->
     try
-      if document.referrer
+      if document.referrer and not COOKIE_TEST_REGEX.test(document.cookie)
         $parser = document.createElement('a')
         $parser.href = document.referrer
         referral =

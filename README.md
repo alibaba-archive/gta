@@ -112,6 +112,12 @@ window._gta_debug = true
 * [GrowingIO](https://help.growingio.com/Developer%20Document.html)
 
 ## Change Log
+#### 1.0.9
+1. Plugin `referral` and `utm` will only record at first time.
+
+#### 1.0.8
+1. Plugin is able to filter event now.
+
 #### 1.0.7
 1. New plugin `referral plugin`
 

@@ -112,8 +112,9 @@ window._gta_debug = true
 * [GrowingIO](https://help.growingio.com/Developer%20Document.html)
 
 ## Change Log
-#### 1.0.9
+#### 1.0.9 - 1.0.10
 1. Plugin `referral` and `utm` will only record at first time.
+2. Plugin `referral` and `utm` now use encodeURIComponent to prevent unexpected cookie cut off.
 
 #### 1.0.8
 1. Plugin is able to filter event now.

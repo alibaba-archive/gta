@@ -21,7 +21,7 @@ class Google extends BaseProvider
     BaseProvider.loadScript script, 'ga'
 
     window.ga 'create', account, 'auto'
-    window.ga 'require', 'displayfeatures'
+    # window.ga 'require', 'displayfeatures'
     window.ga 'require', 'linkid', 'linkid.js'
     window.ga 'send', 'pageview'
 

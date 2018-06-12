@@ -13,6 +13,11 @@ class GTA
   constructor: ->
     $el = document.getElementById 'gta-main'
     return unless $el
+    @delegateEvents()
+
+  init: ->
+    $el = document.getElementById 'gta-main'
+    return unless $el
 
     for own name, Provider of Providers
       @registerProvider name, Provider, $el
@@ -20,7 +25,6 @@ class GTA
     for own name, Plugin of Plugins
       @registerPlugin Plugin
 
-    @delegateEvents()
     Common.removeElement $el
 
   registerProperty: (key, value)->
@@ -55,8 +59,11 @@ class GTA
   setCurrentPage: (page) ->
     @registerProperty('page', page)
 
-  setUser: (id, user) ->
+  setUser: (id, user, turnOff) ->
+    return this if turnOff
+
     try
+      @init()
       for provider in @providers
         formattedUser = Common.formatUser provider, user
         if @debug or window._gta_debug

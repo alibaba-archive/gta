@@ -112,6 +112,9 @@ window._gta_debug = true
 * [GrowingIO](https://help.growingio.com/Developer%20Document.html)
 
 ## Change Log
+#### 1.0.12
+1. Deferred provider loading
+
 #### 1.0.11
 1. Disable `displayfeatures` for Google Analytics
 

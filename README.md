@@ -110,8 +110,12 @@ window._gta_debug = true
 * [Customer.io](https://customer.io/docs/api/javascript.html)
 * [Fullstory](http://help.fullstory.com/using-ref/getting-started)
 * [GrowingIO](https://help.growingio.com/Developer%20Document.html)
+* [SensorsData](https://www.sensorsdata.cn/manual/js_sdk.html)
 
 ## Change Log
+#### 1.1.0
+1. New provider: SensorsData
+
 #### 1.0.12
 1. Deferred provider loading
 

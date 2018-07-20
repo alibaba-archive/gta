@@ -5,11 +5,12 @@ module.exports =
 class SensorsData extends BaseProvider
   name: 'sensorsdata'
 
-  constructor: (account, script) ->
+  constructor: (account, script, track) ->
     return unless account
 
     para =
       name: 'sa'
+      web_url: track
       server_url: account
       sdk_url: '//dn-st.teambition.net/sensorsdata/sensorsdata.latest.min.js'
       heatmap_url: '//dn-st.teambition.net/sensorsdata/heatmap.latest.min.js'

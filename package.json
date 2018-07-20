@@ -1,6 +1,6 @@
 {
   "name": "teambition-gta",
-  "version": "1.1.0-aplha.2",
+  "version": "1.1.0-aplha.3",
   "description": "group teambition analysis tool",
   "main": "lib/index.js",
   "scripts": {

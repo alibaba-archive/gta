@@ -12,6 +12,7 @@ class SensorsData extends BaseProvider
       name: 'sa'
       server_url: account
       sdk_url: '//dn-st.teambition.net/sensorsdata/sensorsdata.latest.min.js'
+      heatmap_url: '//dn-st.teambition.net/sensorsdata/heatmap.latest.min.js'
 
     Common.extend(para, JSON.parse(script || '{}'))
 

@@ -47,4 +47,7 @@ class SensorsData extends BaseProvider
   event: (gtaOptions) ->
     data = Common.extend {}, gtaOptions
     data.platform ?= 'web'
-    window.sa?.track(data.action, data)
+    normalizedAction = data.action
+      .replace(/ /g, '_')
+      .replace(/[^A-Za-z0-9_\$]/g, '')
+    window.sa?.track(normalizedAction, data)

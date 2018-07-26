@@ -47,7 +47,12 @@ class SensorsData extends BaseProvider
   event: (gtaOptions) ->
     data = Common.extend {}, gtaOptions
     data.platform ?= 'web'
+
+    normalizedData = {}
+    for key, value of data
+      normalizedData[key.toLowerCase()] = value
     normalizedAction = data.action
       .replace(/ /g, '_')
       .replace(/[^A-Za-z0-9_\$]/g, '')
-    window.sa?.track(normalizedAction, data)
+      .toLowerCase()
+    window.sa?.track(normalizedAction, normalizedData)

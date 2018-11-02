@@ -113,6 +113,9 @@ window._gta_debug = true
 * [SensorsData](https://www.sensorsdata.cn/manual/js_sdk.html)
 
 ## Change Log
+#### 1.1.1
+1. New Plugin: `distinct id`
+
 #### 1.1.0
 1. New provider: SensorsData
 

@@ -8,14 +8,16 @@ class GTA
   providers: []
   mixPayload: {}
 
-  version: '1.1.2'
+  version: '1.1.3'
 
   constructor: ->
+    return if typeof document is 'undefined'
     $el = document.getElementById 'gta-main'
     return unless $el
     @delegateEvents()
 
   init: ->
+    return if typeof document is 'undefined'
     $el = document.getElementById 'gta-main'
     return unless $el
 

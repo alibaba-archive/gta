@@ -42,3 +42,11 @@ Common.formatUser = (provider, user)->
       else
         result[key] = value
   return result
+
+Common.pick = (obj, keys) ->
+  return unless obj
+  result = {}
+  for key in keys
+    if obj[key]
+      result[key] = obj[key]
+  return result

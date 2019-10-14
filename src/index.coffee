@@ -7,6 +7,7 @@ class GTA
   plugins: []
   providers: []
   mixPayload: {}
+  actionMap: {} 
 
   version: '1.1.3'
 
@@ -15,6 +16,7 @@ class GTA
     $el = document.getElementById 'gta-main'
     return unless $el
     @delegateEvents()
+    @preloadActions($el)
 
   init: ->
     return if typeof document is 'undefined'
@@ -28,6 +30,22 @@ class GTA
       @registerPlugin Plugin
 
     Common.removeElement $el
+
+  initXhr: (url) -> 
+    xhr = new XMLHttpRequest()
+    xhr.open('GET', url, true)
+    xhr.send()
+    return xhr
+
+  preloadActions: ($el) -> 
+    url = $el.getAttribute 'data-tbtracking'
+    return unless url
+    xhr = @initXhr(url)
+    xhr.onreadystatechange = () => 
+      if xhr.readyState is 4 and xhr.status is 200
+        actions = JSON.parse(xhr.response)
+        for item in actions
+          @actionMap[item.hash] = (@actionMap[item.hash] or []).concat(item)
 
   registerProperty: (key, value)->
     @mixPayload[key] = value
@@ -114,8 +132,16 @@ class GTA
           gtaString = el.dataset?.gta
           gtaIgnore = el.dataset?.gtaIgnore
           gtaOptions = Common.parseGta gtaString
+          gtaHash = el.dataset?.gtaHash
+
           if gtaOptions and (!gtaIgnore or matches(e.target, gtaIgnore))
             @event gtaOptions
+          
+          if gtaHash
+            actions = @actionMap[gtaHash] or []
+            for action in actions
+              @event Common.pick action, ['action', 'type', 'control']
+
           el = el.parentElement
       , 0
     document.body.addEventListener 'click', listener, true

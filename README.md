@@ -23,6 +23,7 @@ Then, include the following script in your HTML and you are ready to go:
   data-google="UA-3318xxxx-1"
   data-mixpanel="77e13d08ba42fe31932a1f1418aea7b2"
   data-customer="2ac3fd02efd1f9c57ae9"
+  data-tbtracking="your actions path"
 ></script>
 ```
 
@@ -89,9 +90,34 @@ You can call the `event` function to track an event:
 gta.event({action: 'add content', page: 'Project Page', type: 'task', control: 'tasks layout', method: 'double-click'})
 ```
 
-Or, easily add `data-gta='event'` to a DOM element as:
+either add `data-gta='event'` to a DOM element as:
 ```html
 <button data-gta="{action: 'add content', page: 'Project Page', type: 'task', control: 'tasks layout', method: 'double-click'}">click</button>
+```
+
+or preloading actions to format as:
+
+1. `data-gta-hash` property in DOM element use to load actions.
+```html
+<script id="gta-main"
+  ...
+  data-tbtracking="your actions path"
+></script>
+```
+2. `hash` is the target in your acions list.
+
+```html
+actions = [
+  ...,
+  {
+    hash: hash
+    action: 'add content',
+    control: 'tasks layout',
+    type: 'task',
+  }
+]
+
+<button data-gta-hash="${hash}">click</button>
 ```
 
 To automatically log gtaOptions, you can use the 'debug' mode:
@@ -113,6 +139,10 @@ window._gta_debug = true
 * [SensorsData](https://www.sensorsdata.cn/manual/js_sdk.html)
 
 ## Change Log
+
+#### 1.1.3
+1. Add `data-tbtracking` support
+
 #### 1.1.1 - 1.1.2
 1. New Plugin: `distinct id`
 

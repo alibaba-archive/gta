@@ -140,7 +140,7 @@ window._gta_debug = true
 
 ## Change Log
 
-#### 1.1.3
+#### 1.1.4
 1. Add `data-tbtracking` support
 
 #### 1.1.1 - 1.1.2

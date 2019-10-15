@@ -9,7 +9,7 @@ class GTA
   mixPayload: {}
   actionMap: {} 
 
-  version: '1.1.3'
+  version: '1.1.4'
 
   constructor: ->
     return if typeof document is 'undefined'

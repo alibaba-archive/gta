@@ -1,6 +1,6 @@
 BasePlugin = require './base'
 
-module.exports = class UTMDaemon extends BasePlugin
+module.exports = class DistinctID extends BasePlugin
   name: 'distinct id synchronizer'
 
   constructor: (gta)->

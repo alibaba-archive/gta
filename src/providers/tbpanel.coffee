@@ -5,11 +5,15 @@ module.exports =
 class TBPanel extends BaseProvider
   name: 'tbpanel'
 
-  constructor: (account, scriptUrl) ->
+  loaded: false
+  loadHandlers: []
+
+  constructor: (account, scriptUrl, track) ->
     return unless account
-    scriptUrl or= '//dn-st.teambition.net/tbpanel/tbpanel.d812.js'
+    scriptUrl or= '//g.alicdn.com/teambition-fe/static-files/tbpanel/generic.36b6.js'
 
     lib_name = 'tbpanel'
+    window.TBPANEL_TRACK_URL = track if track
     tbpanel = window.tbpanel = []
     tbpanel._i = []
 
@@ -52,9 +56,22 @@ class TBPanel extends BaseProvider
       tbpanel._i.push [token, config, name]
 
     tbpanel.__SV = 1.2
-    tbpanel.init account
+    tbpanel.init account, loaded: @handleTBPanelLoaded
     script = BaseProvider.createScript scriptUrl
     BaseProvider.loadScript script, lib_name
+
+  handleTBPanelLoaded: =>
+    @loaded = yes
+    while handler = @loadHandlers.shift()
+      handler()
+    return
+
+  onLoad: (handler) ->
+    if @loaded
+      do handler
+    else
+      @loadHandlers.push handler
+    return
 
   setUser: (id, raw_user) ->
     user = Common.extend {}, raw_user
@@ -75,3 +92,11 @@ class TBPanel extends BaseProvider
     data = Common.extend {}, gtaOptions
     data.platform ?= 'web'
     window.tbpanel?.track data.action, data
+
+  login: (userId) ->
+    @onLoad () ->
+      host = window.tbpanel?.get_config('api_host')
+      distinctid = window.tbpanel?.get_distinct_id()
+      req = new XMLHttpRequest()
+      req.open('GET', "#{host}/login?userkey=#{userId}&distinct_id=#{distinctid}")
+      req.send()

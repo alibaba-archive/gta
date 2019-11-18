@@ -140,6 +140,10 @@ window._gta_debug = true
 
 ## Change Log
 
+### 1.1.5
+1. Add `gta.login(userId)` support
+2. Implement `login` method on TBPanel
+
 #### 1.1.4
 1. Add `data-tbtracking` support
 

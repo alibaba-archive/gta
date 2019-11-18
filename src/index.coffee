@@ -9,7 +9,7 @@ class GTA
   mixPayload: {}
   actionMap: {} 
 
-  version: '1.1.4'
+  version: '1.1.5'
 
   constructor: ->
     return if typeof document is 'undefined'
@@ -97,6 +97,20 @@ class GTA
     try
       for provider in @providers
         provider.pageview?.apply provider, arguments
+    catch e
+    return this
+
+  login: (userId) ->
+    try
+      for provider in @providers
+        provider.login?.apply provider, arguments
+    catch e
+    return this
+
+  logout: ->
+    try
+      for provider in @providers
+        provider.logout?.apply provider, arguments
     catch e
     return this
 

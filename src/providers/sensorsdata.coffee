@@ -56,3 +56,9 @@ class SensorsData extends BaseProvider
       .replace(/[^A-Za-z0-9_\$]/g, '')
       .toLowerCase()
     window.sa?.track(normalizedAction, normalizedData)
+
+  login: (userId) ->
+    window.sa?.login(userId)
+
+  logout: ->
+    window.sa?.logout()

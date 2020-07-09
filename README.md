@@ -140,6 +140,9 @@ window._gta_debug = true
 
 ## Change Log
 
+### 1.1.6
+1. Support boot params for providers
+
 ### 1.1.5
 1. Add `gta.login(userId)` support
 2. Implement `login` method on TBPanel

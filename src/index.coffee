@@ -9,7 +9,7 @@ class GTA
   mixPayload: {}
   actionMap: {} 
 
-  version: '1.1.5'
+  version: '1.1.6'
 
   constructor: ->
     return if typeof document is 'undefined'
@@ -61,12 +61,13 @@ class GTA
     account = $el.getAttribute "data-#{name}"
     scriptUrl = $el.getAttribute "data-#{name}-script"
     trackUrl = $el.getAttribute "data-#{name}-track"
+    bootParams = $el.getAttribute "data-#{name}-boot-param"
     randomProportion = $el.getAttribute "data-#{name}-random-proportion"
 
     return true if randomProportion and do Math.random > randomProportion
 
     if account
-      @providers.push new Provider account, scriptUrl, trackUrl
+      @providers.push new Provider account, scriptUrl, trackUrl, bootParams
       return true
 
     return false

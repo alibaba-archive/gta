@@ -8,7 +8,7 @@ class TBPanel extends BaseProvider
   loaded: false
   loadHandlers: []
 
-  constructor: (account, scriptUrl, track) ->
+  constructor: (account, scriptUrl, track, bootParams) ->
     return unless account
     scriptUrl or= '//g.alicdn.com/teambition-fe/static-files/tbpanel/generic.36b6.js'
 
@@ -56,7 +56,16 @@ class TBPanel extends BaseProvider
       tbpanel._i.push [token, config, name]
 
     tbpanel.__SV = 1.2
-    tbpanel.init account, loaded: @handleTBPanelLoaded
+
+    options = loaded: @handleTBPanelLoaded
+
+    try
+      bootParams = JSON.parse(bootParams)
+      options = Common.extend(options, bootParams)
+    catch e
+      console.error e
+
+    tbpanel.init account, options 
     script = BaseProvider.createScript scriptUrl
     BaseProvider.loadScript script, lib_name
 

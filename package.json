@@ -1,23 +1,21 @@
 {
   "name": "teambition-gta",
-  "version": "1.1.6",
-  "description": "group teambition analysis tool",
+  "version": "2.0.0-alpha.7",
+  "description": "A teambition analysis toolkit",
   "main": "lib/index.js",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "clean": "rm -rf lib",
+    "dev": "webpack --watch --progress --mode=development",
+    "prepublishOnly": "rm -rf lib && webpack"
   },
   "repository": {
     "type": "git",
     "url": "git@github.com:teambition/gta"
   },
   "keywords": [
-    "google",
-    "baidu",
-    "mixpanel",
-    "analysis",
-    "customer.io",
-    "fullstory",
-    "growingio"
+    "google analytics",
+    "analysis"
   ],
   "author": "teambition",
   "license": "MIT",
@@ -25,8 +23,9 @@
     "url": "https://github.com/teambition/gta/issues"
   },
   "devDependencies": {
-    "coffee-loader": "^0.7.2",
-    "coffee-script": "^1.11.1",
-    "webpack": "^1.13.3"
+    "ts-loader": "^8.0.16",
+    "webpack": "^5.21.2",
+    "webpack-cli": "^4.5.0",
+    "typescript": "^4.1.3"
   }
 }

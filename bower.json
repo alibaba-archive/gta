@@ -1,12 +1,15 @@
 {
   "name": "gta",
-  "version": "1.1.6",
+  "version": "2.0.0-alpha.7",
   "main": "lib/index.js",
   "ignore": [
     "**/.*",
     "node_modules",
-    "bower_components",
     "test",
-    "tests"
+    "tsconfig.json",
+    "tslint.json",
+    "webpack.config.js",
+    "package.json",
+    "yarn.lock"
   ]
 }

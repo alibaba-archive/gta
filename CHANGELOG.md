@@ -1,5 +1,56 @@
-## Change Log Archive under v1.0.0
-For change log since v1.0.0, please see README.md.
+## Change Log Archive for version below v2.0.0
+For change log since v2.0.0, please see README.md.
+
+### 1.1.6
+1. Support boot params for providers
+
+### 1.1.5
+1. Add `gta.login(userId)` support
+2. Implement `login` method on TBPanel
+
+#### 1.1.4
+1. Add `data-tbtracking` support
+
+#### 1.1.1 - 1.1.2
+1. New Plugin: `distinct id`
+
+#### 1.1.0
+1. New provider: SensorsData
+
+#### 1.0.12
+1. Deferred provider loading
+
+#### 1.0.11
+1. Disable `displayfeatures` for Google Analytics
+
+#### 1.0.9 - 1.0.10
+1. Plugin `referral` and `utm` will only record at first time.
+2. Plugin `referral` and `utm` now use encodeURIComponent to prevent unexpected cookie cut off.
+
+#### 1.0.8
+1. Plugin is able to filter event now.
+
+#### 1.0.7
+1. New plugin `referral plugin`
+
+#### 1.0.5 - 1.0.6
+1. `gta.registerPlugin` now returns plugin's instance
+
+#### 1.0.4
+1. TBPanel now accepts optional `scriptUrl`
+
+#### 1.0.3
+1. New API: `registerProvider`
+
+#### 1.0.2
+1. Now library can be exported to `window.Gta`
+
+#### 1.0.1
+1. Fix GTA crash when provider Baidu crash.
+
+#### 1.0.0
+1. New architecture
+2. New APIs: `(un)register(Property|Plugin)`
 
 #### 0.9.8
 1. New provider: GrowingIO

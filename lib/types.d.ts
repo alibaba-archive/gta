@@ -16,7 +16,7 @@ export declare type GTAOptions = {
     };
 };
 export declare type GTAEvent = {
-    [key: string]: string;
+    [key: string]: string | number;
 };
 export interface Provider {
     name: string;

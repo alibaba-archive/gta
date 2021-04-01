@@ -5,6 +5,7 @@ import { CookieAbbr, DEBUG_FLAG, find, formatUserFor, parseConfigElement, setDeb
 import { BaseProviderParams, GTAEvent, GTAOptions, PluginConstructor, Plugin, Provider, ProviderConstructor } from 'types'
 
 import { SuperPropertyPlugin } from 'plugin.d/super-property'
+import { DurationPlugin } from 'plugin.d/duration'
 
 declare const __MACRO_VERSION__: string
 
@@ -27,6 +28,7 @@ export class GTA {
 
   constructor() {
     this.registerPlugin(SuperPropertyPlugin, null)
+    this.registerPlugin(DurationPlugin, null)
   }
 
   init(options?: GTAOptions) {

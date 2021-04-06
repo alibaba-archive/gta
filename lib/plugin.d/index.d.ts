@@ -1,2 +1,2 @@
-import { PluginConstructor } from "types";
+import { PluginConstructor } from '../types';
 export declare const plugins: PluginConstructor[];

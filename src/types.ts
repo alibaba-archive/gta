@@ -1,6 +1,6 @@
-import type { GTA } from 'index'
+import type { GTA } from './index'
 
-export type { GTA } from 'index'
+export type { GTA } from './index'
 
 export type Dict<T = string> = {
   [key: string]: T

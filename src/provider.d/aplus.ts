@@ -1,5 +1,5 @@
-import { GTAEvent, Provider } from 'types'
-import { imageGET } from 'utils'
+import { GTAEvent, Provider } from '../types'
+import { imageGET } from '../utils'
 
 export type Params = {
   account: string

@@ -1,5 +1,5 @@
-import { GTA } from 'types'
-import { parseGTA } from 'utils'
+import { GTA } from '../types'
+import { parseGTA } from '../utils'
 
 const matches = (el: HTMLElement, selector: string) =>
   (el.matches || (el as any).matchesSelector ||

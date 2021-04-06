@@ -1,4 +1,4 @@
-import type { GTAOptions, Provider } from 'types';
+import type { GTAOptions, Provider } from './types';
 export declare const removeNode: (el: HTMLElement) => void;
 export declare const createScript: (src: string, id?: string | undefined) => HTMLScriptElement;
 export declare const loadScript: (script: HTMLScriptElement, key?: string | undefined, removeAfterLoad?: boolean) => void;

@@ -1,5 +1,5 @@
-import { GTAEvent, Provider } from 'types'
-import { xhrGET } from 'utils'
+import { GTAEvent, Provider } from '../types'
+import { xhrGET } from '../utils'
 
 export type Params = {
   account: string

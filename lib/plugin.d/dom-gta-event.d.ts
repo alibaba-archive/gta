@@ -1,4 +1,4 @@
-import { GTA } from 'types';
+import { GTA } from '../types';
 export declare class DOMGTAEventPlugin {
     private gta;
     static pluginName: string;

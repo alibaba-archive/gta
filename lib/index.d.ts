@@ -1,7 +1,7 @@
-import { CookieStorage } from 'storage';
-import { BaseProviderParams, GTAEvent, GTAOptions, PluginConstructor, Plugin, Provider, ProviderConstructor } from 'types';
-import 'plugin.d/super-property';
-import 'plugin.d/duration';
+import { CookieStorage } from './storage';
+import { BaseProviderParams, GTAEvent, GTAOptions, PluginConstructor, Plugin, Provider, ProviderConstructor } from './types';
+import './plugin.d/super-property';
+import './plugin.d/duration';
 export declare const kVersion: string;
 export declare class GTA {
     static version: string;

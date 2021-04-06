@@ -1,4 +1,4 @@
-import { GTAEvent, Provider } from 'types';
+import { GTAEvent, Provider } from '../types';
 export declare type Params = {
     account: string;
     track?: string;

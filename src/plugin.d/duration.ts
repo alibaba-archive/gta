@@ -1,7 +1,7 @@
 
-import { GTA, Plugin } from 'types'
+import { GTA, Plugin } from '../types'
 
-declare module 'index' {
+declare module '../index' {
   interface GTA {
     durationStart?: DurationPlugin['durationStart']
     durationEnd?: DurationPlugin['durationEnd']

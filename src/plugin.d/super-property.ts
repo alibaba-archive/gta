@@ -1,7 +1,7 @@
-import { Dict, GTA, GTAEvent, Plugin } from 'types'
-import { CookieAbbr } from 'utils'
+import { Dict, GTA, GTAEvent, Plugin } from '../types'
+import { CookieAbbr } from '../utils'
 
-declare module 'index' {
+declare module '../index' {
   interface GTA {
     setCurrentPage: SuperPropertyPlugin['setCurrentPage']
     registerProperty: SuperPropertyPlugin['registerProperty']

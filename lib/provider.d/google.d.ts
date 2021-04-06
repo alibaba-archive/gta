@@ -1,4 +1,4 @@
-import { GTAEvent, Provider } from 'types';
+import { GTAEvent, Provider } from '../types';
 declare global {
     interface Window {
         ga?: any;

@@ -1,5 +1,5 @@
-import { GTA, Plugin } from 'types';
-declare module 'index' {
+import { GTA, Plugin } from '../types';
+declare module '../index' {
     interface GTA {
         getUTM?: UTMDaemon['get'];
         sweepUTM?: UTMDaemon['sweep'];

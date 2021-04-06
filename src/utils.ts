@@ -1,7 +1,7 @@
-import type { GTAOptions, Provider } from 'types'
+import type { GTAOptions, Provider } from './types'
 
-import { plugins } from 'plugin.d'
-import { providers } from 'provider.d'
+import { plugins } from './plugin.d'
+import { providers } from './provider.d'
 
 export const removeNode = (el: HTMLElement) => {
   el.parentNode?.removeChild(el)

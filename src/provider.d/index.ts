@@ -1,4 +1,4 @@
-import { ProviderConstructor } from 'types'
+import { ProviderConstructor } from '../types'
 
 import { APlus } from './aplus'
 import { TBPanelLite } from './tbpanel'

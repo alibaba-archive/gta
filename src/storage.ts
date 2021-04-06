@@ -1,4 +1,4 @@
-import { CookieAbbr } from 'utils'
+import { CookieAbbr } from './utils'
 
 export class CookieStorage {
   private domain: string

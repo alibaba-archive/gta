@@ -1,5 +1,5 @@
-import { GTAEvent, Provider } from 'types'
-import { createScript, loadScript } from 'utils'
+import { GTAEvent, Provider } from '../types'
+import { createScript, loadScript } from '../utils'
 
 declare global {
   interface Window {

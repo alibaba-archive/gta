@@ -1,11 +1,11 @@
-import { plugins } from 'plugin.d'
-import { providers } from 'provider.d'
-import { CookieStorage } from 'storage'
-import { CookieAbbr, DEBUG_FLAG, find, formatUserFor, parseConfigElement, setDebugFlag, UUID } from 'utils'
-import { BaseProviderParams, GTAEvent, GTAOptions, PluginConstructor, Plugin, Provider, ProviderConstructor } from 'types'
+import { plugins } from './plugin.d'
+import { providers } from './provider.d'
+import { CookieStorage } from './storage'
+import { CookieAbbr, DEBUG_FLAG, find, formatUserFor, parseConfigElement, setDebugFlag, UUID } from './utils'
+import { BaseProviderParams, GTAEvent, GTAOptions, PluginConstructor, Plugin, Provider, ProviderConstructor } from './types'
 
-import { SuperPropertyPlugin } from 'plugin.d/super-property'
-import { DurationPlugin } from 'plugin.d/duration'
+import { SuperPropertyPlugin } from './plugin.d/super-property'
+import { DurationPlugin } from './plugin.d/duration'
 
 declare const __MACRO_VERSION__: string
 

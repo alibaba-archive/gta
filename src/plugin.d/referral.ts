@@ -1,7 +1,7 @@
-import { GTA, Plugin } from 'types'
-import { CookieAbbr, kUUIDRandPrefix } from 'utils'
+import { GTA, Plugin } from '../types'
+import { CookieAbbr, kUUIDRandPrefix } from '../utils'
 
-declare module 'index' {
+declare module '../index' {
   interface GTA {
     getReferral?: ReferralDaemon['get']
     sweepReferral?: ReferralDaemon['sweep']

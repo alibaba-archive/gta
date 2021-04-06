@@ -1,5 +1,5 @@
-import { GTA, GTAEvent, Plugin } from 'types';
-declare module 'index' {
+import { GTA, GTAEvent, Plugin } from '../types';
+declare module '../index' {
     interface GTA {
         setCurrentPage: SuperPropertyPlugin['setCurrentPage'];
         registerProperty: SuperPropertyPlugin['registerProperty'];

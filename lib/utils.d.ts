@@ -12,6 +12,7 @@ export declare const imageGET: (url: string) => HTMLImageElement;
 export declare const kUUIDRandPrefix = "72616e64";
 export declare const UUID: () => string;
 export declare const find: <T>(arr: T[], predictor: (i: T) => boolean) => T | null;
+export declare const deleteCookie: (name: string, domain?: string | undefined) => void;
 export declare let DEBUG_FLAG: boolean;
 export declare const setDebugFlag: (flag: boolean) => void;
 export declare const DBGCALL: (...args: any[]) => void;

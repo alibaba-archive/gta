@@ -138,6 +138,11 @@ export const find = <T>(arr: T[], predictor: (i: T) => boolean): T | null => {
   return null
 }
 
+export const deleteCookie = (name: string, domain?: string) => {
+  const cookieDomain = domain ? `domain=${domain};` : ''
+  document.cookie = `${name}=DELETED;expires=Thu, 01 Jan 1970 00:00:00 UTC;${cookieDomain}path=/`
+}
+
 export let DEBUG_FLAG = false
 export const setDebugFlag = (flag: boolean) => { DEBUG_FLAG = flag }
 export const DBGCALL = (...args: any[]) => {

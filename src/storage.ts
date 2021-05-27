@@ -1,4 +1,4 @@
-import { CookieAbbr } from './utils'
+import { CookieAbbr, deleteCookie } from './utils'
 
 export class CookieStorage {
   private domain: string
@@ -78,6 +78,6 @@ export class CookieStorage {
     if (options?.flushCache ?? true) {
       this.cache = {}
     }
-    document.cookie = `${this.key}=DELETED;expires=Thu, 01 Jan 1970 00:00:00 UTC;${this.cookieDomain}path=/`
+    deleteCookie(this.key, this.domain)
   }
 }

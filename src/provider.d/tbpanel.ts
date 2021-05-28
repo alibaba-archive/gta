@@ -35,6 +35,7 @@ export class TBPanelLite implements Provider {
     const payload = btoa(JSON.stringify({
       event: eventDetails.action,
       properties: {
+        mp_lib: 'web',
         userKey: this.userKey,
         distinct_id: this.userKey,
         event_name: eventDetails.action || 'no-op',

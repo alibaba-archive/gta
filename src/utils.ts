@@ -26,6 +26,9 @@ export const loadScript = (script: HTMLScriptElement, key?: string, removeAfterL
       removeNode(script)
     }
   }
+
+  const firstScript = document.getElementsByTagName('script')[0]
+  firstScript?.parentNode?.insertBefore(script, firstScript)
 }
 
 // gta规则：
@@ -127,6 +130,7 @@ export const kUUIDRandPrefix = '72616e64'  /* '72616e64'.decode('hex') is 'rand'
 export const UUID = () => kUUIDRandPrefix + ('' + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c: any) => {
   return (((Math.random() * 16) | 0) >> (c / 4)).toString(16)
 })
+export const isRandomID = (id: string) => id.indexOf(kUUIDRandPrefix) === 0
 
 export const find = <T>(arr: T[], predictor: (i: T) => boolean): T | null => {
   const len = arr.length

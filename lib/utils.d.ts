@@ -11,6 +11,7 @@ export declare const xhrGET: (url: string) => XMLHttpRequest;
 export declare const imageGET: (url: string) => HTMLImageElement;
 export declare const kUUIDRandPrefix = "72616e64";
 export declare const UUID: () => string;
+export declare const isRandomID: (id: string) => boolean;
 export declare const find: <T>(arr: T[], predictor: (i: T) => boolean) => T | null;
 export declare const deleteCookie: (name: string, domain?: string | undefined) => void;
 export declare let DEBUG_FLAG: boolean;

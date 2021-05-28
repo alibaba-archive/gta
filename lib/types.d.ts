@@ -23,7 +23,9 @@ export interface Provider {
     pageview?: () => void;
     event?: (e: GTAEvent) => void;
     setUser?: (userId: string, user: object) => void;
-    login?: (userId: string, user: object) => void;
+    login?: (userId: string, user: object, options: {
+        prevId: string;
+    }) => void;
     logout?: (userId: string) => void;
 }
 export declare type BaseProviderParams = {

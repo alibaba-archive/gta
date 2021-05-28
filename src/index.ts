@@ -170,11 +170,12 @@ export class GTA {
 
   login(userId: string, user: object) {
     try {
+      const prevId = this.storage.get<string>(CookieAbbr.userKey) || ''
       this.storage.set(CookieAbbr.userKey, userId)
       for (let i = 0; i < this.providers.length; ++i) {
         const provider = this.providers[i]
         const formattedUser = formatUserFor(provider, user || {})
-        provider.login?.(userId, formattedUser)
+        provider.login?.(userId, formattedUser, { prevId })
       }
     } catch (e) {
       DEBUG('GTA error when login: ', e)

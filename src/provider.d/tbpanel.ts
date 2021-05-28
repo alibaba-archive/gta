@@ -43,4 +43,10 @@ export class TBPanelLite implements Provider {
     }).toLowerCase())
     xhrGET(`${this.trackUrl}/track/?data=${payload}&_=${Date.now()}`)
   }
+
+  login(userId: string, _user: object, options: { prevId: string }) {
+    if (!/[a-fA-F0-9]{24}/.test(options.prevId)) {
+      xhrGET(`${this.trackUrl}/login?userkey=${userId}&distinct_id=${options.prevId}`)
+    }
+  }
 }

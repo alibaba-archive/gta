@@ -11,4 +11,7 @@ export declare class TBPanelLite implements Provider {
     constructor(params: Params);
     setUser(userKey: string): void;
     event(eventDetails: GTAEvent): void;
+    login(userId: string, _user: object, options: {
+        prevId: string;
+    }): void;
 }

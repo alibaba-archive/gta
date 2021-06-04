@@ -17,7 +17,16 @@ module.exports = {
     libraryExport: 'default',
     umdNamedDefine: true,
     path: path.resolve(__dirname, 'lib'),
-    filename: "index.js"
+    filename: "index.js",
+    environment: {
+      arrowFunction: false,
+      bigIntLiteral: false,
+      const: false,
+      destructuring: false,
+      dynamicImport: false,
+      forOf: false,
+      module: false,
+    },
   },
   module: {
     rules: [

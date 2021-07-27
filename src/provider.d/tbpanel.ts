@@ -38,6 +38,7 @@ export class TBPanelLite implements Provider {
         mp_lib: 'web',
         userKey: this.userKey,
         distinct_id: this.userKey,
+        sys_current_url: window.location?.href,
         event_name: eventDetails.action || 'no-op',
         ...eventDetails
       }
